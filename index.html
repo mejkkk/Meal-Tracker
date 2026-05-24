@@ -1,0 +1,1889 @@
+<!DOCTYPE html>
+<html lang="th" class="theme-night">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Tracker - บันทึกมื้ออาหาร</title>
+  <style>
+    /* CSS Variables for Minimal Pastel Theme */
+    :root {
+      /* Night Mode (Default) Colors */
+      --bg-color: #121214;
+      --card-bg: #1a1a1e;
+      --text-main: #e2e8f0;
+      --text-sub: #94a3b8;
+      --border-color: #2e2e38;
+      
+      /* Pastels for Accents */
+      --pastel-lavender: #d8b4fe;
+      --pastel-mint: #a7f3d0;
+      --pastel-peach: #fed7aa;
+      --pastel-blue: #bae6fd;
+      --pastel-pink: #fbcfe8;
+      
+      /* Button styles */
+      --btn-bg: #2e2e38;
+      --btn-text: #e2e8f0;
+      --btn-active-bg: var(--pastel-lavender);
+      --btn-active-text: #121214;
+      
+      /* Chat Preview Colors */
+      --chat-bg: #1c241c;
+      --bubble-bg: #2b3d2b;
+      --bubble-text: #e2e8f0;
+    }
+
+    html.theme-day {
+      /* Day Mode Colors */
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-main: #1e293b;
+      --text-sub: #64748b;
+      --border-color: #e2e8f0;
+      
+      --btn-bg: #f1f5f9;
+      --btn-text: #1e293b;
+      
+      /* Chat Preview Colors */
+      --chat-bg: #85a98f;
+      --bubble-bg: #ffffff;
+      --bubble-text: #1e293b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--card-bg);
+    }
+
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      letter-spacing: -0.025em;
+    }
+
+    .theme-toggle-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      padding: 0.25rem;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .theme-toggle-btn:hover {
+      background-color: var(--btn-bg);
+    }
+
+    .main-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .main-container {
+        grid-template-columns: 1fr;
+        overflow: y-scroll;
+      }
+    }
+
+    .panel-input {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .panel-preview {
+      padding: 1.5rem;
+      background-color: var(--bg-color);
+      border-left: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      overflow-y: auto;
+    }
+
+    @media (max-width: 768px) {
+      .panel-preview {
+        border-left: none;
+        border-top: 1px solid var(--border-color);
+      }
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .card-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.75rem;
+    }
+
+    /* Buttons utilities */
+    .btn {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-color);
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 44px; /* Touch target */
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background-color: var(--pastel-lavender);
+      color: #121214;
+      border-color: transparent;
+      font-weight: 600;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.05);
+    }
+
+    /* Time Selection Buttons & Quick Food Tags styling */
+    .time-part-btn {
+      padding: 0.25rem 0.5rem;
+      border: 1px solid var(--border-color);
+      background-color: var(--btn-bg);
+      color: var(--btn-text);
+      border-radius: 4px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      min-width: 32px;
+      text-align: center;
+    }
+    .time-part-btn.active {
+      background-color: var(--pastel-lavender);
+      color: #121214;
+      border-color: transparent;
+    }
+    .quick-food-tag {
+      background-color: var(--btn-bg);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 0.25rem 0.55rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+      user-select: none;
+    }
+    .quick-food-tag:hover {
+      background-color: var(--pastel-mint);
+      color: #121214;
+      border-color: transparent;
+    }
+    .quick-food-tag .remove-tag {
+      font-size: 0.7rem;
+      color: var(--text-sub);
+      cursor: pointer;
+      padding: 0 0.1rem;
+      border-radius: 50%;
+      width: 14px;
+      height: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .quick-food-tag .remove-tag:hover {
+      background-color: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+    }
+
+    /* Modal Overlay and Content styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* iOS Picker Column container */
+    .picker-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1rem;
+      height: 96px; /* Show exactly 3 rows of 32px */
+      background: var(--bg-color);
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      position: relative;
+      overflow: hidden;
+      user-select: none;
+      width: 100%;
+      max-width: 280px;
+      margin: 0.5rem auto 0;
+    }
+
+    /* Center selection bar overlay */
+    .picker-selection-bar {
+      position: absolute;
+      top: 32px; /* height / 3 */
+      left: 0;
+      width: 100%;
+      height: 32px; /* one row height */
+      border-top: 1px solid var(--pastel-lavender);
+      border-bottom: 1px solid var(--pastel-lavender);
+      background-color: rgba(216, 180, 254, 0.05);
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* Scroll column */
+    .picker-column {
+      flex: 1;
+      height: 100%;
+      overflow-y: scroll;
+      scroll-snap-type: y mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; /* Firefox */
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .picker-column::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+
+    /* Padding to allow centering first and last items */
+    .picker-padding {
+      height: 32px;
+    }
+
+    /* Picker items */
+    .picker-item {
+      height: 32px;
+      line-height: 32px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-sub);
+      scroll-snap-align: center;
+      cursor: pointer;
+      transition: color 0.15s ease, font-size 0.15s ease, font-weight 0.15s ease;
+    }
+
+    .picker-item.selected {
+      color: var(--pastel-lavender);
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    /* Hide scrollbars for horizontal portion selectors */
+    #qty-buttons-grid::-webkit-scrollbar {
+      display: none;
+    }
+    #qty-buttons-grid {
+      scrollbar-width: none;
+    }
+
+
+    /* Toast Notification styles */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background-color: var(--pastel-mint);
+      color: #121214;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+      opacity: 0;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+    }
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* TDD Dashboard View styling */
+    #test-dashboard {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #0f172a;
+      color: #cbd5e1;
+      padding: 2rem;
+      overflow-y: auto;
+      z-index: 9999;
+      display: none;
+    }
+
+    #test-dashboard.active {
+      display: block;
+    }
+
+    .test-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 1rem;
+    }
+
+    .test-item {
+      padding: 0.75rem 1rem;
+      border-radius: 6px;
+      margin-bottom: 0.5rem;
+      font-family: monospace;
+    }
+
+    .test-item.running {
+      background-color: #1e293b;
+      border-left: 4px solid #64748b;
+    }
+
+    .test-item.pass {
+      background-color: #064e3b;
+      color: #a7f3d0;
+      border-left: 4px solid #10b981;
+    }
+
+    .test-item.fail {
+      background-color: #7f1d1d;
+      color: #fecaca;
+      border-left: 4px solid #ef4444;
+    }
+
+    .test-item pre {
+      margin-top: 0.5rem;
+      font-size: 0.85rem;
+      color: #fda4af;
+      white-space: pre-wrap;
+    }
+
+    .test-summary {
+      font-size: 1.2rem;
+      font-weight: bold;
+      margin-top: 1.5rem;
+      padding: 1rem;
+      border-radius: 6px;
+    }
+
+    .test-summary.all-pass {
+      background-color: #065f46;
+      color: #34d399;
+    }
+
+    .test-summary.some-fail {
+      background-color: #991b1b;
+      color: #fca5a5;
+    }
+
+    /* LINE chat simulation style */
+    .line-chat {
+      background-color: var(--chat-bg);
+      border-radius: 12px;
+      padding: 1rem;
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      border: 1px solid var(--border-color);
+      flex: 1;
+    }
+
+    .chat-bubble {
+      background-color: var(--bubble-bg);
+      color: var(--bubble-text);
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border-top-left-radius: 2px;
+      max-width: 85%;
+      align-self: flex-start;
+      white-space: pre-wrap;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Main Application Header -->
+  <header>
+    <h1 id="app-title">Meal Tracker 🥣</h1>
+    <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle Theme">🌙</button>
+  </header>
+
+  <!-- Main Application Layout -->
+  <main class="main-container" id="app-main">
+    <!-- Left panel: Inputs -->
+    <div class="panel-input">
+      <!-- Section: Date -->
+      <div class="card" style="padding: 1rem 1.25rem;">
+        <h2 class="card-title" style="margin-bottom: 0.5rem; font-size: 0.85rem;">วันที่บันทึก (Date)</h2>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+          <button class="btn" id="btn-prev-date" style="padding: 0.25rem 0.6rem; min-height: 32px; font-size: 0.85rem;">◀</button>
+          <div id="date-display" style="font-size: 0.95rem; font-weight: bold; text-align: center; flex: 1; color: var(--text-main);">-</div>
+          <button class="btn" id="btn-next-date" style="padding: 0.25rem 0.6rem; min-height: 32px; font-size: 0.85rem;">▶</button>
+        </div>
+      </div>
+
+
+      <!-- Section: Meals & Food Menu -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
+        <h2 class="card-title" style="margin-bottom: 0.25rem;">มื้ออาหาร (Meals)</h2>
+        
+        <!-- Meals List -->
+        <div id="meals-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+          <!-- Meal Items Rendered here -->
+        </div>
+
+        <!-- Food Menu Section (Hidden until a meal is added) -->
+        <div id="food-menu-section" style="border-top: 1px solid var(--border-color); padding-top: 1rem; margin-top: 0.5rem; display: none; flex-direction: column; gap: 0.75rem;">
+          <h3 style="font-size: 0.85rem; font-weight: 600; color: var(--text-sub); margin-bottom: 0.25rem; text-transform: uppercase;">เมนูอาหาร</h3>
+          
+          <!-- Food Menu Grid -->
+          <div id="quick-foods-grid" style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.25rem;">
+            <!-- Rendered food tags -->
+          </div>
+
+          <!-- Quantity Options (Inline) -->
+          <div id="quantity-options-container" style="display: flex; flex-direction: column; gap: 0.4rem; background-color: var(--bg-color); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
+            <span style="font-size: 0.8rem; color: var(--text-sub);" id="qty-instructions-label">กรุณาเลือกเมนูอาหารด้านบนก่อน</span>
+            <div id="qty-buttons-grid" style="display: flex; overflow-x: auto; gap: 0.4rem; display: none; padding: 0.25rem 0; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+              <!-- Rendered quantity buttons dynamically -->
+            </div>
+
+          </div>
+
+          <!-- Custom Food Input -->
+          <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.25rem;">
+            <input type="text" id="input-new-food" placeholder="ระบุเอง เช่น กระเพราไก่ 150 กรัม" style="flex: 1; padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); font-size: 0.85rem;">
+            <button class="btn" id="btn-add-custom-food" style="min-height: 38px; padding: 0 0.75rem; font-size: 0.85rem;">เพิ่ม</button>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" id="btn-add-meal" style="margin-top: 0.5rem;">➕ เพิ่มมื้ออาหาร</button>
+      </div>
+
+      <!-- Section: Water -->
+      <div class="card">
+        <h2 class="card-title">ปริมาณน้ำดื่ม (Water Intake)</h2>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+          <button class="btn" id="btn-water-minus" style="font-size: 1.1rem; width: 60px;">-100</button>
+          <div style="font-size: 1.4rem; font-weight: bold; text-align: center; flex: 1;">
+            <span id="water-display">2000</span> <span style="font-size: 0.95rem; font-weight: normal; color: var(--text-sub);">ml</span>
+          </div>
+          <button class="btn" id="btn-water-plus" style="font-size: 1.1rem; width: 60px;">+100</button>
+        </div>
+      </div>
+
+      <!-- Section: Cardio -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <h2 class="card-title" style="margin-bottom: 0.25rem;">คาร์ดิโอ (Cardio)</h2>
+        
+        <!-- Logged Cardios list -->
+        <div id="cardio-logs-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem; min-height: 38px; padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 6px; background-color: var(--bg-color);">
+          <!-- Rendered cardio tags -->
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem;">
+          <span style="font-size: 0.8rem; color: var(--text-sub);">ประเภทกิจกรรม:</span>
+          <div id="cardio-activity-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+            <!-- Rendered buttons -->
+          </div>
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
+          <span style="font-size: 0.8rem; color: var(--text-sub);">เวลา (นาที):</span>
+          <div id="cardio-duration-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+            <!-- Rendered buttons -->
+          </div>
+        </div>
+        
+        <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.25rem;">
+          <input type="text" id="input-custom-cardio" placeholder="ระบุเอง เช่น ปั่นจักรยาน 40 นาที" style="flex: 1; padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); font-size: 0.85rem;">
+          <button class="btn" id="btn-add-custom-cardio" style="min-height: 34px; padding: 0 0.75rem; font-size: 0.85rem;">เพิ่ม</button>
+        </div>
+      </div>
+
+      <!-- Section: Weight Training -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <h2 class="card-title" style="margin-bottom: 0.25rem;">เวทเทรนนิ่ง (Weight Training)</h2>
+        <div id="weight-muscles-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+          <!-- Toggles for muscles -->
+        </div>
+      </div>
+
+      <!-- Section: Note -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <h2 class="card-title" style="margin-bottom: 0.25rem;">โน้ตเพิ่มเติม (Note)</h2>
+        <textarea id="input-note" placeholder="วันนี้ติดงาน กินได้น้อยครับ ยุ่งจัดๆ..." style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem; background-color: var(--card-bg); color: var(--text-main); font-size: 0.9rem; min-height: 80px; resize: vertical;"></textarea>
+      </div>
+
+      <!-- Section: Photo Link -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <h2 class="card-title" style="margin-bottom: 0.25rem;">ลิงก์รูปภาพ (Photo Link)</h2>
+        <input type="text" id="input-photo-link" placeholder="วางลิงก์โฟลเดอร์รูปภาพ เช่น Google Drive" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem; background-color: var(--card-bg); color: var(--text-main); font-size: 0.9rem;">
+      </div>
+    </div>
+
+    <!-- Right panel: Preview -->
+    <div class="panel-preview">
+      <h2 class="card-title" style="margin-bottom: 0.25rem;">ตัวอย่างการส่งเข้า LINE (Preview)</h2>
+      <div class="line-chat">
+        <div class="chat-bubble" id="chat-bubble-preview">
+          กำลังเตรียมข้อมูล...
+        </div>
+      </div>
+      <button class="btn btn-primary" id="btn-copy-line" style="width: 100%; font-size: 1.1rem; min-height: 50px;">
+        📋 คัดลอกข้อมูลสำหรับ LINE (Copy to Clipboard)
+      </button>
+    </div>
+  </main>
+
+  <div id="toast-notification" class="toast">📋 คัดลอกสำหรับ LINE เรียบร้อยแล้ว!</div>
+
+  <!-- Modal for Food Quantity Adjustment -->
+  <div id="qty-modal" class="modal-overlay" style="display: none;">
+    <div class="card" style="width: 100%; max-width: 300px; display: flex; flex-direction: column; gap: 1rem;">
+      <h3 id="modal-food-name" style="font-size: 1.1rem; font-weight: 600; text-align: center; margin-bottom: 0.25rem;">ข้าว</h3>
+      
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
+        <button class="btn" id="btn-qty-minus" style="font-size: 1.3rem; width: 50px; min-height: 40px; padding: 0;">-</button>
+        <input type="number" id="input-qty" style="flex: 1; text-align: center; font-size: 1.3rem; font-weight: bold; padding: 0.4rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); width: 80px;" value="100">
+        <button class="btn" id="btn-qty-plus" style="font-size: 1.3rem; width: 50px; min-height: 40px; padding: 0;">+</button>
+      </div>
+      
+      <div style="display: flex; justify-content: center; gap: 0.5rem;">
+        <span id="modal-unit-label" style="font-size: 0.85rem; font-weight: 600; color: var(--text-sub); background-color: var(--btn-bg); padding: 0.2rem 0.6rem; border-radius: 4px;">g</span>
+      </div>
+
+      <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+        <button class="btn" id="btn-modal-cancel" style="flex: 1; min-height: 40px; font-size: 0.9rem;">ยกเลิก</button>
+        <button class="btn btn-primary" id="btn-modal-confirm" style="flex: 1; min-height: 40px; font-size: 0.9rem;">ตกลง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Test Dashboard View -->
+  <div id="test-dashboard">
+    <div class="test-header">
+      <h2>🤖 Test Runner Dashboard (TDD Mode)</h2>
+      <div>
+        <button class="btn" id="btn-close-tests">Close Tests</button>
+      </div>
+    </div>
+    <div id="test-results">
+      <!-- Test results will be outputted here -->
+    </div>
+  </div>
+
+  <script>
+    // =================================================================
+    // CONFIGURATION: แก้ไขเมนูอาหารเริ่มต้นและปริมาณหน่วยที่นี่ได้เลยครับ
+    // =================================================================
+    const DEFAULT_FOOD_ITEMS = [
+      { name: "ข้าว", minQty: 80, maxQty: 300, step: 10, defaultQty: 150, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
+      { name: "ผัดสันในหมูพริกไทยดำ", minQty: 50, maxQty: 200, step: 10, defaultQty: 100, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
+      { name: "ไข่", minQty: 1, maxQty: 5, step: 1, defaultQty: 1, unit: "", displayUnit: "ฟอง", spaceBeforeUnit: false },
+      { name: "นมมก", minQty: 0.5, maxQty: 3.0, step: 0.5, defaultQty: 1.0, unit: "ชต", displayUnit: "ชต", spaceBeforeUnit: true },
+      { name: "โอนิกิริ", minQty: 1, maxQty: 3, step: 1, defaultQty: 1, unit: "", displayUnit: "ชิ้น", spaceBeforeUnit: false },
+      { name: "กล้วย", minQty: 50, maxQty: 150, step: 10, defaultQty: 100, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
+      { name: "น้ำมะพร้าว", minQty: 1, maxQty: 3, step: 1, defaultQty: 1, unit: "ขวด", displayUnit: "ขวด", spaceBeforeUnit: true },
+      { name: "โยเกิร์ต", minQty: 1, maxQty: 3, step: 1, defaultQty: 1, unit: "", displayUnit: "ถ้วย", spaceBeforeUnit: false },
+      { name: "อัลม่อน", minQty: 10, maxQty: 100, step: 10, defaultQty: 20, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
+      { name: "นม", minQty: 100, maxQty: 350, step: 50, defaultQty: 150, unit: "ml", displayUnit: "ml", spaceBeforeUnit: false }
+    ];
+
+
+    const THAI_MONTHS = ["มค", "กพ", "มีค", "เมย", "พค", "มิย", "กค", "สค", "กย", "ตค", "พย", "ธค"];
+    let currentDate = new Date();
+
+    let state = {
+      theme: 'night',
+      date: '',
+      date_iso: '',
+      meals: [],
+      water: 2000,
+      cardio: [], // Array of strings for multiple cardios
+      weight: [],
+      note: '',
+      photoLink: ''
+    };
+
+    // Load state - starting fresh every reload
+    function loadState() {
+      applyTheme('night');
+      initDate();
+      updateWaterUI();
+    }
+
+    // Save state - disabled data persistence
+    function saveState() {
+      // Data persistence disabled on user request (fresh start on load)
+    }
+
+    // Apply theme helper
+    function applyTheme(theme) {
+      const html = document.documentElement;
+      const toggleBtn = document.getElementById('theme-toggle-btn');
+      if (theme === 'day') {
+        html.className = 'theme-day';
+        if (toggleBtn) toggleBtn.textContent = '☀️';
+      } else {
+        html.className = 'theme-night';
+        if (toggleBtn) toggleBtn.textContent = '🌙';
+      }
+    }
+
+    // Toggle theme action
+    function toggleTheme() {
+      state.theme = state.theme === 'night' ? 'day' : 'night';
+      applyTheme(state.theme);
+    }
+
+    // --- Date Formatting and Handlers ---
+    function getISODateString(date) {
+      return date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
+    }
+
+    function getThaiBEDateString(date) {
+      const day = date.getDate();
+      const month = THAI_MONTHS[date.getMonth()];
+      const year = date.getFullYear() + 543;
+      return `${day} ${month} ${year}`;
+    }
+
+
+    function initDate() {
+      if (state.date_iso) {
+        // Parse yyyy-mm-dd
+        const parts = state.date_iso.split('-');
+        currentDate = new Date(parts[0], parts[1] - 1, parts[2]);
+      } else {
+        currentDate = new Date();
+      }
+      updateDateDisplay();
+    }
+
+    function updateDateDisplay() {
+      state.date = getThaiBEDateString(currentDate);
+      state.date_iso = getISODateString(currentDate);
+      const display = document.getElementById('date-display');
+      if (display) {
+        display.textContent = "วันที่ " + state.date;
+      }
+      saveState();
+      updatePreview();
+    }
+
+    function changeDate(days) {
+      currentDate.setDate(currentDate.getDate() + days);
+      updateDateDisplay();
+    }
+
+    // --- Water Formatting and Handlers ---
+    function changeWater(amount) {
+      state.water = Math.max(0, state.water + amount);
+      updateWaterUI();
+      saveState();
+      updatePreview();
+    }
+
+    function updateWaterUI() {
+      const display = document.getElementById('water-display');
+      if (display) {
+        display.textContent = state.water;
+      }
+    }
+
+    // --- Meals and Quick Items Handlers ---
+    const THAI_NUMBERS = ["แรก", "สอง", "สาม", "สี่", "ห้า", "หก", "เจ็ด", "แปด", "เก้า", "สิบ"];
+    function getMealName(index) {
+      const num = THAI_NUMBERS[index] || (index + 1);
+      return `มื้อ${num}`;
+    }
+
+    let activeMealId = null;
+
+    function addMeal() {
+      const newId = Date.now() + Math.floor(Math.random() * 1000);
+      state.meals.push({
+        id: newId,
+        time: '12:00', // Default initial time is 12:00
+        showTimePicker: true, // Show the scroll picker by default when added
+        foods: []
+      });
+      activeMealId = newId;
+      saveState();
+      renderMeals();
+      renderFoodMenu();
+      renderQuantityOptions();
+      updatePreview();
+    }
+
+    function deleteMeal(id) {
+      state.meals = state.meals.filter(m => m.id !== id);
+      if (activeMealId === id) {
+        activeMealId = state.meals.length > 0 ? state.meals[state.meals.length - 1].id : null;
+      }
+      saveState();
+      renderMeals();
+      renderFoodMenu();
+      renderQuantityOptions();
+      updatePreview();
+    }
+
+    function setMealTime(mealId, timeString) {
+      const meal = state.meals.find(m => m.id === mealId);
+      if (meal) {
+        meal.time = timeString;
+        saveState();
+        
+        // Update DOM time badge directly
+        const badge = document.querySelector(`.meal-item[data-id="${mealId}"] .meal-time-badge`);
+        if (badge) {
+          badge.textContent = `⏱️ ${timeString.replace(':', '.')}`;
+        }
+        
+        updateTimeButtonsActiveState(mealId);
+        updatePreview();
+      }
+    }
+
+    function updateTimeButtonsActiveState(mealId) {
+      const meal = state.meals.find(m => m.id === mealId);
+      if (!meal) return;
+      const mealCard = document.querySelector(`.meal-item[data-id="${mealId}"]`);
+      if (!mealCard) return;
+      const hourCol = mealCard.querySelector('.hour-column');
+      const minCol = mealCard.querySelector('.min-column');
+      if (hourCol && minCol) {
+        const time = meal.time || '12:00';
+        const [h, m] = time.split(':');
+        
+        const hourItems = Array.from(hourCol.querySelectorAll('.picker-item'));
+        const minItems = Array.from(minCol.querySelectorAll('.picker-item'));
+        
+        const hIdx = hourItems.findIndex(item => item.getAttribute('data-val') === h);
+        const mIdx = minItems.findIndex(item => item.getAttribute('data-val') === m);
+        
+        if (hIdx !== -1) {
+          const targetScroll = hIdx * 40;
+          if (Math.abs(hourCol.scrollTop - targetScroll) > 5) {
+            hourCol.scrollTop = targetScroll;
+          }
+          hourItems.forEach((item, idx) => {
+            if (idx === hIdx) item.classList.add('selected');
+            else item.classList.remove('selected');
+          });
+        }
+        
+        if (mIdx !== -1) {
+          const targetScroll = mIdx * 40;
+          if (Math.abs(minCol.scrollTop - targetScroll) > 5) {
+            minCol.scrollTop = targetScroll;
+          }
+          minItems.forEach((item, idx) => {
+            if (idx === mIdx) item.classList.add('selected');
+            else item.classList.remove('selected');
+          });
+        }
+      }
+    }
+
+    function renderMeals() {
+      const container = document.getElementById('meals-list');
+      const foodMenuSection = document.getElementById('food-menu-section');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      
+      if (state.meals.length === 0) {
+        container.innerHTML = `<div style="text-align: center; color: var(--text-sub); padding: 1rem; font-size: 0.9rem; border: 1px dashed var(--border-color); border-radius: 8px;">ยังไม่มีมื้ออาหาร กดปุ่มด้านล่างเพื่อเพิ่ม</div>`;
+        if (foodMenuSection) foodMenuSection.style.display = 'none';
+        return;
+      }
+      
+      if (foodMenuSection) foodMenuSection.style.display = 'flex';
+      
+      state.meals.forEach((meal, index) => {
+        const mealName = getMealName(index);
+        const card = document.createElement('div');
+        card.className = 'meal-item';
+        card.setAttribute('data-id', meal.id);
+        card.style.border = '1px solid var(--border-color)';
+        card.style.borderRadius = '8px';
+        card.style.padding = '0.75rem';
+        card.style.backgroundColor = 'var(--card-bg)';
+        card.style.display = 'flex';
+        card.style.flexDirection = 'column';
+        card.style.gap = '0.5rem';
+        card.style.cursor = 'pointer';
+        
+        // Highlight active meal card
+        if (meal.id === activeMealId) {
+          card.style.borderColor = 'var(--pastel-lavender)';
+          card.style.boxShadow = '0 0 0 2px rgba(216, 180, 254, 0.2)';
+        } else {
+          card.style.borderColor = 'var(--border-color)';
+        }
+        
+        card.addEventListener('click', () => {
+          if (activeMealId !== meal.id) {
+            activeMealId = meal.id;
+            renderMeals();
+            renderFoodMenu();
+            renderQuantityOptions();
+          }
+        });
+        
+        const formattedTime = meal.time ? meal.time.replace(':', '.') : '--.--';
+        
+        const header = document.createElement('div');
+        header.style.display = 'flex';
+        header.style.justifyContent = 'space-between';
+        header.style.alignItems = 'center';
+        header.innerHTML = `
+          <span style="font-weight: 600; font-size: 0.95rem;">${mealName}</span>
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="meal-time-badge" style="background-color: var(--btn-bg); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">⏱️ ${formattedTime}</span>
+            <button class="btn-delete-meal" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 0.2rem; min-height: auto;">❌</button>
+          </div>
+        `;
+        
+        // Badge click to toggle time picker
+        const badge = header.querySelector('.meal-time-badge');
+        badge.addEventListener('click', (e) => {
+          e.stopPropagation();
+          activeMealId = meal.id;
+          meal.showTimePicker = !meal.showTimePicker;
+          // Hide all other pickers
+          state.meals.forEach(m => {
+            if (m.id !== meal.id) m.showTimePicker = false;
+          });
+          renderMeals();
+          renderFoodMenu();
+          renderQuantityOptions();
+        });
+        
+        header.querySelector('.btn-delete-meal').addEventListener('click', (e) => {
+          e.stopPropagation();
+          deleteMeal(meal.id);
+        });
+        
+        // Logged foods list tags display
+        const foodsContainer = document.createElement('div');
+        foodsContainer.style.display = 'flex';
+        foodsContainer.style.flexWrap = 'wrap';
+        foodsContainer.style.gap = '0.4rem';
+        foodsContainer.style.minHeight = '38px';
+        foodsContainer.style.padding = '0.4rem';
+        foodsContainer.style.border = '1px solid var(--border-color)';
+        foodsContainer.style.borderRadius = '6px';
+        foodsContainer.style.backgroundColor = 'var(--bg-color)';
+        
+        if (!meal.foods || meal.foods.length === 0) {
+          foodsContainer.innerHTML = `<span style="font-size: 0.82rem; color: var(--text-sub); align-self: center; padding-left: 0.25rem;">ยังไม่มีรายการอาหาร แตะเมนูอาหารด้านล่างเพื่อเพิ่ม</span>`;
+        } else {
+          meal.foods.forEach((foodText, foodIdx) => {
+            const badge = document.createElement('span');
+            badge.style.display = 'inline-flex';
+            badge.style.alignItems = 'center';
+            badge.style.gap = '0.25rem';
+            badge.style.backgroundColor = 'var(--btn-bg)';
+            badge.style.border = '1px solid var(--border-color)';
+            badge.style.color = 'var(--text-main)';
+            badge.style.padding = '0.2rem 0.5rem';
+            badge.style.borderRadius = '6px';
+            badge.style.fontSize = '0.85rem';
+            
+            badge.innerHTML = `
+              <span>${foodText}</span>
+              <span class="remove-food" style="color: #ef4444; font-weight: bold; cursor: pointer; padding-left: 0.2rem;">&times;</span>
+            `;
+            
+            badge.querySelector('.remove-food').addEventListener('click', (e) => {
+              e.stopPropagation();
+              meal.foods.splice(foodIdx, 1);
+              saveState();
+              renderMeals();
+              updatePreview();
+            });
+            
+            foodsContainer.appendChild(badge);
+          });
+        }
+        
+        const timeSelector = document.createElement('div');
+        timeSelector.className = 'meal-time-selector';
+        timeSelector.style.display = meal.showTimePicker ? 'block' : 'none';
+        timeSelector.style.backgroundColor = 'var(--bg-color)';
+        timeSelector.style.padding = '0.5rem';
+        timeSelector.style.borderRadius = '6px';
+        timeSelector.style.border = '1px solid var(--border-color)';
+        timeSelector.style.marginTop = '0.25rem';
+        
+        const hourOptions = Array.from({ length: 24 }, (_, i) => String(i + 1).padStart(2, '0'));
+        const minOptions = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
+        
+        timeSelector.innerHTML = `
+          <div class="picker-container" style="height: 96px;">
+            <div class="picker-selection-bar" style="top: 32px; height: 32px;"></div>
+            
+            <!-- Hours Column -->
+            <div class="picker-column hour-column">
+              <div class="picker-padding" style="height: 32px;"></div>
+              ${hourOptions.map(h => `<div class="picker-item" style="height:32px; line-height:32px;" data-val="${h}">${h}</div>`).join('')}
+              <div class="picker-padding" style="height: 32px;"></div>
+            </div>
+            
+            <div style="font-size: 1.5rem; font-weight: bold; color: var(--pastel-lavender); line-height: 96px; z-index: 2;">:</div>
+            
+            <!-- Minutes Column -->
+            <div class="picker-column min-column">
+              <div class="picker-padding" style="height: 32px;"></div>
+              ${minOptions.map(m => `<div class="picker-item" style="height:32px; line-height:32px;" data-val="${m}">${m}</div>`).join('')}
+              <div class="picker-padding" style="height: 32px;"></div>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-done-time" style="width: 100%; margin-top: 0.5rem; min-height: 36px; font-size: 0.85rem; padding: 0.2rem 0.5rem;">ตกลง</button>
+        `;
+        
+        const hourCol = timeSelector.querySelector('.hour-column');
+        const minCol = timeSelector.querySelector('.min-column');
+        const doneBtn = timeSelector.querySelector('.btn-done-time');
+        
+        if (doneBtn) {
+          doneBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            meal.showTimePicker = false;
+            renderMeals();
+          });
+        }
+        
+        let scrollTimeoutHour;
+        let scrollTimeoutMin;
+
+        function commitSelectedTime() {
+          if (typeof hourCol.querySelector !== 'function' || typeof minCol.querySelector !== 'function') return;
+          const activeHourItem = hourCol.querySelector('.picker-item.selected');
+          const activeMinItem = minCol.querySelector('.picker-item.selected');
+          if (activeHourItem && activeMinItem) {
+            const h = activeHourItem.getAttribute('data-val');
+            const m = activeMinItem.getAttribute('data-val');
+            setMealTime(meal.id, `${h}:${m}`);
+          }
+        }
+
+        hourCol.addEventListener('scroll', () => {
+          clearTimeout(scrollTimeoutHour);
+          const index = Math.round(hourCol.scrollTop / 32);
+          if (typeof hourCol.querySelectorAll !== 'function') return;
+          const items = hourCol.querySelectorAll('.picker-item');
+          items.forEach((item, idx) => {
+            if (idx === index) item.classList.add('selected');
+            else item.classList.remove('selected');
+          });
+          scrollTimeoutHour = setTimeout(commitSelectedTime, 100);
+        });
+
+        minCol.addEventListener('scroll', () => {
+          clearTimeout(scrollTimeoutMin);
+          const index = Math.round(minCol.scrollTop / 32);
+          if (typeof minCol.querySelectorAll !== 'function') return;
+          const items = minCol.querySelectorAll('.picker-item');
+          items.forEach((item, idx) => {
+            if (idx === index) item.classList.add('selected');
+            else item.classList.remove('selected');
+          });
+          scrollTimeoutMin = setTimeout(commitSelectedTime, 100);
+        });
+
+        if (typeof timeSelector.querySelectorAll === 'function') {
+          timeSelector.querySelectorAll('.picker-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const col = item.parentElement;
+              if (col && typeof col.querySelectorAll === 'function') {
+                const items = Array.from(col.querySelectorAll('.picker-item'));
+                const idx = items.indexOf(item);
+                if (idx !== -1 && typeof col.scrollTo === 'function') {
+                  col.scrollTo({
+                    top: idx * 32,
+                    behavior: 'smooth'
+                  });
+                }
+              }
+            });
+          });
+        }
+
+        function syncPickerScroll(smooth = false) {
+          if (!hourCol || !minCol || typeof hourCol.querySelectorAll !== 'function' || typeof minCol.querySelectorAll !== 'function') return;
+          const time = meal.time || '12:00';
+          const [h, m] = time.split(':');
+          
+          const hourItems = Array.from(hourCol.querySelectorAll('.picker-item'));
+          const minItems = Array.from(minCol.querySelectorAll('.picker-item'));
+          
+          const hIdx = hourItems.findIndex(item => item.getAttribute('data-val') === h);
+          const mIdx = minItems.findIndex(item => item.getAttribute('data-val') === m);
+          
+          if (hIdx !== -1) {
+            if (typeof hourCol.scrollTo === 'function') {
+              hourCol.scrollTo({
+                top: hIdx * 32,
+                behavior: smooth ? 'smooth' : 'auto'
+              });
+            } else {
+              hourCol.scrollTop = hIdx * 32;
+            }
+            hourItems.forEach((item, idx) => {
+              if (idx === hIdx) item.classList.add('selected');
+              else item.classList.remove('selected');
+            });
+          }
+          
+          if (mIdx !== -1) {
+            if (typeof minCol.scrollTo === 'function') {
+              minCol.scrollTo({
+                top: mIdx * 32,
+                behavior: smooth ? 'smooth' : 'auto'
+              });
+            } else {
+              minCol.scrollTop = mIdx * 32;
+            }
+            minItems.forEach((item, idx) => {
+              if (idx === mIdx) item.classList.add('selected');
+              else item.classList.remove('selected');
+            });
+          }
+        }
+
+        
+        card.appendChild(header);
+        card.appendChild(foodsContainer);
+        card.appendChild(timeSelector);
+        container.appendChild(card);
+        
+        if (meal.showTimePicker) {
+          setTimeout(() => {
+            syncPickerScroll(false);
+          }, 50);
+        }
+      });
+    }
+
+    function addFoodToActiveMeal(foodText) {
+      if (state.meals.length === 0) {
+        addMeal();
+      }
+      let targetMeal = state.meals.find(m => m.id === activeMealId);
+      if (!targetMeal && state.meals.length > 0) {
+        targetMeal = state.meals[state.meals.length - 1];
+        activeMealId = targetMeal.id;
+      }
+      
+      if (targetMeal) {
+        if (!targetMeal.foods) targetMeal.foods = [];
+        targetMeal.foods.push(foodText);
+        saveState();
+        renderMeals();
+        updatePreview();
+      }
+    }
+
+    // --- Quick Foods and Quantity Modal Logic ---
+    let activeFoodItem = null;
+
+    function getFormattedFoodString(item, qty) {
+      const unitStr = item.unit || "";
+      const space = item.spaceBeforeUnit ? " " : "";
+      return `${item.name} ${qty}${space}${unitStr}`;
+    }
+
+    function renderFoodMenu() {
+      const grid = document.getElementById('quick-foods-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      
+      DEFAULT_FOOD_ITEMS.forEach(item => {
+        const tag = document.createElement('span');
+        tag.className = 'quick-food-tag';
+        tag.textContent = item.name;
+        tag.style.cursor = 'pointer';
+        
+        if (activeFoodItem && activeFoodItem.name === item.name) {
+          tag.classList.add('active');
+          tag.style.backgroundColor = 'var(--pastel-mint)';
+          tag.style.color = '#121214';
+          tag.style.borderColor = 'transparent';
+        }
+        
+        tag.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (activeFoodItem && activeFoodItem.name === item.name) {
+            activeFoodItem = null;
+          } else {
+            activeFoodItem = item;
+          }
+          renderFoodMenu();
+          renderQuantityOptions();
+        });
+        
+        grid.appendChild(tag);
+      });
+    }
+
+    function renderQuantityOptions() {
+      const label = document.getElementById('qty-instructions-label');
+      const grid = document.getElementById('qty-buttons-grid');
+      if (!label || !grid) return;
+      
+      if (!activeFoodItem) {
+        label.textContent = "กรุณาเลือกเมนูอาหารด้านบนก่อน";
+        grid.style.display = 'none';
+        grid.innerHTML = '';
+        return;
+      }
+      
+      label.textContent = `เลือกปริมาณสำหรับ ${activeFoodItem.name}:`;
+      grid.style.display = 'flex';
+      grid.innerHTML = '';
+      
+      let presets = [];
+      const displayUnit = activeFoodItem.displayUnit;
+      
+      const minVal = activeFoodItem.minQty !== undefined ? activeFoodItem.minQty : 50;
+      const maxVal = activeFoodItem.maxQty !== undefined ? activeFoodItem.maxQty : 150;
+      const stepVal = activeFoodItem.step !== undefined ? activeFoodItem.step : 10;
+      const defaultVal = activeFoodItem.defaultQty !== undefined ? activeFoodItem.defaultQty : 100;
+      
+      for (let q = minVal; q <= maxVal; q += stepVal) {
+        presets.push(Math.round(q * 10) / 10);
+      }
+      
+      if (!presets.includes(defaultVal)) {
+        presets.push(defaultVal);
+        presets.sort((a, b) => a - b);
+      }
+      
+      presets.forEach(qty => {
+        const btn = document.createElement('button');
+        const isDefault = qty === defaultVal;
+        btn.className = `btn ${isDefault ? 'btn-primary' : ''}`;
+        btn.style.minHeight = '38px';
+        btn.style.padding = '0.25rem 0.75rem';
+        btn.style.fontSize = '0.85rem';
+        btn.style.flexShrink = '0';
+        
+        const space = activeFoodItem.spaceBeforeUnit ? " " : "";
+        btn.textContent = `${qty}${space}${displayUnit}`;
+        
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          addFoodToActiveMealFromPreset(qty);
+        });
+        
+        grid.appendChild(btn);
+        
+        // Auto scroll default button to center of container
+        if (isDefault) {
+          setTimeout(() => {
+            const containerWidth = grid.clientWidth;
+            const btnLeft = btn.offsetLeft;
+            const btnWidth = btn.clientWidth;
+            grid.scrollLeft = btnLeft - (containerWidth / 2) + (btnWidth / 2);
+          }, 50);
+        }
+      });
+    }
+
+
+    function addFoodToActiveMealFromPreset(qty) {
+      if (!activeFoodItem) return;
+      
+      if (state.meals.length === 0) {
+        addMeal();
+      }
+      
+      const foodStr = getFormattedFoodString(activeFoodItem, qty);
+      let targetMeal = state.meals.find(m => m.id === activeMealId);
+      if (!targetMeal && state.meals.length > 0) {
+        targetMeal = state.meals[state.meals.length - 1];
+        activeMealId = targetMeal.id;
+      }
+      
+      if (targetMeal) {
+        if (!targetMeal.foods) targetMeal.foods = [];
+        targetMeal.foods.push(foodStr);
+        saveState();
+        renderMeals();
+        updatePreview();
+      }
+      
+      activeFoodItem = null;
+      renderFoodMenu();
+      renderQuantityOptions();
+    }
+
+    // --- Cardio and Weight Handlers ---
+    const CARDIO_ACTIVITIES = ["เดินวิ่ง", "ปั่นจักรยาน", "เดินลู่", "ว่ายน้ำ"];
+    const CARDIO_DURATIONS = ["10 นาที", "20 นาที", "30 นาที", "45 นาที", "60 นาที", "90 นาที", "120 นาที"];
+    const WEIGHT_MUSCLES = ["อก", "ไหล่", "หลัง", "แขน", "ขา", "หน้าท้อง"];
+
+    let activeCardioActivity = null;
+
+    function selectCardioActivity(activity) {
+      if (activeCardioActivity === activity) {
+        activeCardioActivity = null; // Toggle off
+      } else {
+        activeCardioActivity = activity;
+      }
+      renderCardio();
+    }
+
+    function selectCardioDuration(duration) {
+      if (!activeCardioActivity) return;
+      const cardioText = `${activeCardioActivity} ${duration}`;
+      state.cardio.push(cardioText);
+      activeCardioActivity = null;
+      saveState();
+      renderCardio();
+      updatePreview();
+    }
+
+    function addCustomCardio() {
+      const input = document.getElementById('input-custom-cardio');
+      if (!input) return;
+      const text = input.value.trim();
+      if (text) {
+        state.cardio.push(text);
+        input.value = '';
+        saveState();
+        renderCardio();
+        updatePreview();
+      }
+    }
+
+    function removeCardio(index) {
+      state.cardio.splice(index, 1);
+      saveState();
+      renderCardio();
+      updatePreview();
+    }
+
+    function renderCardio() {
+      const logsContainer = document.getElementById('cardio-logs-container');
+      const actContainer = document.getElementById('cardio-activity-container');
+      const durContainer = document.getElementById('cardio-duration-container');
+      
+      if (logsContainer) {
+        logsContainer.innerHTML = '';
+        if (state.cardio.length === 0) {
+          logsContainer.innerHTML = `<span style="font-size: 0.82rem; color: var(--text-sub); align-self: center; padding-left: 0.25rem;">ยังไม่มีกิจกรรมคาร์ดิโอ แตะตัวเลือกด้านล่างเพื่อเพิ่ม</span>`;
+        } else {
+          state.cardio.forEach((cardioText, idx) => {
+            const badge = document.createElement('span');
+            badge.style.display = 'inline-flex';
+            badge.style.alignItems = 'center';
+            badge.style.gap = '0.25rem';
+            badge.style.backgroundColor = 'var(--btn-bg)';
+            badge.style.border = '1px solid var(--border-color)';
+            badge.style.color = 'var(--text-main)';
+            badge.style.padding = '0.2rem 0.5rem';
+            badge.style.borderRadius = '6px';
+            badge.style.fontSize = '0.85rem';
+            
+            badge.innerHTML = `
+              <span>${cardioText}</span>
+              <span class="remove-cardio" style="color: #ef4444; font-weight: bold; cursor: pointer; padding-left: 0.2rem;">&times;</span>
+            `;
+            
+            badge.querySelector('.remove-cardio').addEventListener('click', (e) => {
+              e.stopPropagation();
+              removeCardio(idx);
+            });
+            
+            logsContainer.appendChild(badge);
+          });
+        }
+      }
+      
+      if (actContainer) {
+        actContainer.innerHTML = '';
+        CARDIO_ACTIVITIES.forEach(act => {
+          const btn = document.createElement('button');
+          btn.className = `btn ${activeCardioActivity === act ? 'btn-primary' : ''}`;
+          btn.style.minHeight = '38px';
+          btn.style.padding = '0.25rem 0.75rem';
+          btn.style.fontSize = '0.85rem';
+          btn.textContent = act;
+          btn.addEventListener('click', () => selectCardioActivity(act));
+          actContainer.appendChild(btn);
+        });
+      }
+      
+      if (durContainer) {
+        durContainer.innerHTML = '';
+        CARDIO_DURATIONS.forEach(dur => {
+          const btn = document.createElement('button');
+          btn.className = 'btn';
+          btn.style.minHeight = '38px';
+          btn.style.padding = '0.25rem 0.75rem';
+          btn.style.fontSize = '0.85rem';
+          btn.textContent = dur;
+          
+          if (!activeCardioActivity) {
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+          } else {
+            btn.addEventListener('click', () => selectCardioDuration(dur));
+          }
+          durContainer.appendChild(btn);
+        });
+      }
+    }
+
+    function toggleWeightMuscle(muscle) {
+      if (state.weight.includes(muscle)) {
+        state.weight = state.weight.filter(m => m !== muscle);
+      } else {
+        state.weight.push(muscle);
+      }
+      saveState();
+      renderWeight();
+      updatePreview();
+    }
+
+    function renderWeight() {
+      const container = document.getElementById('weight-muscles-container');
+      if (!container) return;
+      
+      container.innerHTML = '';
+      WEIGHT_MUSCLES.forEach(muscle => {
+        const isActive = state.weight.includes(muscle);
+        const btn = document.createElement('button');
+        btn.className = `btn ${isActive ? 'btn-primary' : ''}`;
+        btn.style.minHeight = '42px';
+        btn.style.padding = '0.4rem 1rem';
+        btn.style.fontSize = '0.9rem';
+        btn.textContent = muscle;
+        btn.addEventListener('click', () => toggleWeightMuscle(muscle));
+        container.appendChild(btn);
+      });
+    }
+
+    // --- LINE Output Text Formatter ---
+    function formatOutput() {
+      let output = "";
+      output += "วันที่ " + (state.date || "") + "\n";
+      output += "อาหาร\n";
+      
+      state.meals.forEach((meal, index) => {
+        const mealName = getMealName(index);
+        const timePart = meal.time ? " " + meal.time.replace(':', '.') : "";
+        const textPart = meal.foods && meal.foods.length > 0 ? " " + meal.foods.join(' ') : "";
+        output += `- ${mealName}${timePart}${textPart}\n`;
+      });
+      
+      output += "- น้ำ " + state.water + "ml";
+      
+      // Cardio and Weight
+      let cardioText = '';
+      if (state.cardio && state.cardio.length > 0) {
+        cardioText = state.cardio.join(', ');
+      }
+      
+      const hasCardio = !!cardioText;
+      const hasWeight = state.weight && state.weight.length > 0;
+      
+      if (hasCardio || hasWeight) {
+        output += "\n\n"; // Blank line after water
+        if (hasCardio) {
+          output += `คาดิโอ: ${cardioText}\n`;
+        }
+        if (hasWeight) {
+          output += `เวท: ${state.weight.join(' ')}\n`;
+        }
+        if (output.endsWith('\n')) {
+          output = output.slice(0, -1);
+        }
+      }
+      
+      // Note
+      if (state.note && state.note.trim()) {
+        output += "\n\n" + state.note.trim();
+      }
+      
+      // Photo Link
+      if (state.photoLink && state.photoLink.trim()) {
+        output += "\n\nรูป\n" + state.photoLink.trim();
+      }
+      
+      return output;
+    }
+
+    function updatePreview() {
+      const bubble = document.getElementById('chat-bubble-preview');
+      if (bubble) {
+        bubble.textContent = formatOutput();
+      }
+    }
+
+    // --- Clipboard & Toast Helpers ---
+    function copyToClipboard() {
+      const text = formatOutput();
+      navigator.clipboard.writeText(text).then(() => {
+        showToast("📋 คัดลอกสำหรับ LINE เรียบร้อยแล้ว!");
+      }).catch(err => {
+        console.error("Clipboard copy failed", err);
+        // Fallback for some browsers / local file protocol
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand('copy');
+          showToast("📋 คัดลอกสำหรับ LINE เรียบร้อยแล้ว!");
+        } catch (e) {
+          alert("ไม่สามารถคัดลอกได้อัตโนมัติ กรุณาคัดลอกด้วยตนเองจากช่อง Preview ด้านบน");
+        }
+        document.body.removeChild(textarea);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast-notification');
+      if (toast) {
+        toast.textContent = message;
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2000);
+      }
+    }
+
+    // --- DOM Setup & Event Listeners ---
+    document.addEventListener('DOMContentLoaded', () => {
+      loadState();
+      renderMeals();
+      renderFoodMenu();
+      renderQuantityOptions();
+      renderCardio();
+      renderWeight();
+      updatePreview();
+
+      // Theme toggle click
+      const themeBtn = document.getElementById('theme-toggle-btn');
+      if (themeBtn) {
+        themeBtn.addEventListener('click', toggleTheme);
+      }
+
+      // Date selectors
+      const prevDateBtn = document.getElementById('btn-prev-date');
+      const nextDateBtn = document.getElementById('btn-next-date');
+      if (prevDateBtn) prevDateBtn.addEventListener('click', () => changeDate(-1));
+      if (nextDateBtn) nextDateBtn.addEventListener('click', () => changeDate(1));
+
+      // Water selectors
+      const waterMinusBtn = document.getElementById('btn-water-minus');
+      const waterPlusBtn = document.getElementById('btn-water-plus');
+      if (waterMinusBtn) waterMinusBtn.addEventListener('click', () => changeWater(-100));
+      if (waterPlusBtn) waterPlusBtn.addEventListener('click', () => changeWater(100));
+
+      // Add Meal button click
+      const addMealBtn = document.getElementById('btn-add-meal');
+      if (addMealBtn) {
+        addMealBtn.addEventListener('click', addMeal);
+      }
+
+      // Custom Cardio input bindings
+      const btnAddCustomCardio = document.getElementById('btn-add-custom-cardio');
+      const customCardioInput = document.getElementById('input-custom-cardio');
+      if (btnAddCustomCardio) {
+        btnAddCustomCardio.addEventListener('click', addCustomCardio);
+      }
+      if (customCardioInput) {
+        customCardioInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            addCustomCardio();
+          }
+        });
+      }
+
+      // Note bindings
+      const noteInput = document.getElementById('input-note');
+      if (noteInput) {
+        noteInput.value = state.note || '';
+        noteInput.addEventListener('input', (e) => {
+          state.note = e.target.value;
+          saveState();
+          updatePreview();
+        });
+      }
+
+      // Photo Link bindings
+      const photoInput = document.getElementById('input-photo-link');
+      if (photoInput) {
+        photoInput.value = state.photoLink || '';
+        photoInput.addEventListener('input', (e) => {
+          state.photoLink = e.target.value;
+          saveState();
+          updatePreview();
+        });
+      }
+
+      // Copy to LINE clipboard button
+      const copyBtn = document.getElementById('btn-copy-line');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', copyToClipboard);
+      }
+
+      // Custom Food Input Bindings
+      const inputNewFood = document.getElementById('input-new-food');
+      const btnAddCustomFood = document.getElementById('btn-add-custom-food');
+
+      function commitCustomFood() {
+        if (!inputNewFood) return;
+        const text = inputNewFood.value.trim();
+        if (text) {
+          if (state.meals.length === 0) {
+            addMeal();
+          }
+          let targetMeal = state.meals.find(m => m.id === activeMealId);
+          if (!targetMeal && state.meals.length > 0) {
+            targetMeal = state.meals[state.meals.length - 1];
+            activeMealId = targetMeal.id;
+          }
+          if (targetMeal) {
+            if (!targetMeal.foods) targetMeal.foods = [];
+            targetMeal.foods.push(text);
+            inputNewFood.value = '';
+            saveState();
+            renderMeals();
+            updatePreview();
+          }
+        }
+      }
+
+      if (btnAddCustomFood) {
+        btnAddCustomFood.addEventListener('click', commitCustomFood);
+      }
+      if (inputNewFood) {
+        inputNewFood.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            commitCustomFood();
+          }
+        });
+      }
+
+      // Test Mode Router
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('test') === 'true') {
+        const dashboard = document.getElementById('test-dashboard');
+        if (dashboard) {
+          dashboard.classList.add('active');
+          runTests();
+        }
+      }
+
+      const closeTestsBtn = document.getElementById('btn-close-tests');
+      if (closeTestsBtn) {
+        closeTestsBtn.addEventListener('click', () => {
+          const dashboard = document.getElementById('test-dashboard');
+          if (dashboard) {
+            dashboard.classList.remove('active');
+            // Remove test parameter from URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('test');
+            window.history.replaceState({}, document.title, url.toString());
+          }
+        });
+      }
+    });
+
+    // --- TDD SELF-TEST SUITE ---
+    var tests = [];
+    function test(name, fn) {
+      tests.push({ name, fn });
+    }
+    function assert(condition, message) {
+      if (!condition) throw new Error(message || "Assertion failed");
+    }
+    function assertEquals(actual, expected, message) {
+      if (actual !== expected) {
+        throw new Error((message ? message + ": " : "") + `Expected [${expected}] but got [${actual}]`);
+      }
+    }
+
+    // Slice 1 Tests
+    test("Initializes with default state", async () => {
+      assertEquals(state.theme, 'night', "ธีมเริ่มต้นควรเป็น night");
+    });
+
+    test("Toggles theme correctly", async () => {
+      state.theme = 'night';
+      applyTheme('night');
+      assert(document.documentElement.classList.contains('theme-night'), "คลาส html ควรมี theme-night");
+      assert(!document.documentElement.classList.contains('theme-day'), "คลาส html ไม่ควรมี theme-day");
+      
+      toggleTheme();
+      assertEquals(state.theme, 'day', "สถานะของธีมควรเปลี่ยนเป็น day");
+      assert(document.documentElement.classList.contains('theme-day'), "คลาส html ควรมี theme-day");
+      assert(!document.documentElement.classList.contains('theme-night'), "คลาส html ไม่ควรมี theme-night");
+
+      toggleTheme();
+    });
+
+    test("Formats custom quantities correctly", async () => {
+      const riceItem = DEFAULT_FOOD_ITEMS.find(i => i.name === "ข้าว");
+      const eggItem = DEFAULT_FOOD_ITEMS.find(i => i.name === "ไข่");
+      const milkItem = DEFAULT_FOOD_ITEMS.find(i => i.name === "นมมก");
+      
+      assertEquals(getFormattedFoodString(riceItem, 150), "ข้าว 150g");
+      assertEquals(getFormattedFoodString(eggItem, 2), "ไข่ 2");
+      assertEquals(getFormattedFoodString(milkItem, 1.5), "นมมก 1.5 ชต");
+    });
+
+    test("Gram-unit items have customized defaults and steps", async () => {
+      const riceItem = DEFAULT_FOOD_ITEMS.find(i => i.name === "ข้าว");
+      const porkItem = DEFAULT_FOOD_ITEMS.find(i => i.name === "ผัดสันในหมูพริกไทยดำ");
+      const milkItem = DEFAULT_FOOD_ITEMS.find(i => i.name === "นม");
+      const almondItem = DEFAULT_FOOD_ITEMS.find(i => i.name === "อัลม่อน");
+
+      assertEquals(riceItem.defaultQty, 150, "ข้าวควรมีดีฟอลต์ 150g");
+      assertEquals(porkItem.defaultQty, 100, "เนื้อสัตว์ควรมีดีฟอลต์ 100g");
+      assertEquals(milkItem.defaultQty, 150, "นมควรมีดีฟอลต์ 150ml");
+      assertEquals(almondItem.defaultQty, 20, "อัลม่อน (เนยถั่ว) ควรมีดีฟอลต์ 20g");
+    });
+
+    test("Date formatting to Thai BE works correctly", async () => {
+      const testDate = new Date(2026, 4, 24); // 24 May 2026
+      const formatted = getThaiBEDateString(testDate);
+      assertEquals(formatted, "24 พค 2569", "วันที่ 24 พฤษภาคม 2026 ต้องแปลงเป็น '24 พค 2569'");
+    });
+
+
+    test("Adjusts water correctly and clamps at 0", async () => {
+      const origWater = state.water;
+      state.water = 2000;
+      changeWater(100);
+      assertEquals(state.water, 2100, "น้ำควรเพิ่มเป็น 2100");
+      changeWater(-2200);
+      assertEquals(state.water, 0, "น้ำไม่ควรติดลบ (ควรปัดเป็น 0)");
+      state.water = origWater;
+    });
+
+    test("Meal names are generated sequentially in Thai", async () => {
+      assertEquals(getMealName(0), "มื้อแรก", "ดัชนี 0 ควรเป็น มื้อแรก");
+      assertEquals(getMealName(1), "มื้อสอง", "ดัชนี 1 ควรเป็น มื้อสอง");
+      assertEquals(getMealName(9), "มื้อสิบ", "ดัชนี 9 ควรเป็น มื้อสิบ");
+      assertEquals(getMealName(10), "มื้อ11", "ดัชนี 10 ควรเป็น มื้อ11");
+    });
+
+    test("Adds and deletes meals correctly", async () => {
+      const origMeals = [...state.meals];
+      state.meals = [];
+      
+      addMeal();
+      assertEquals(state.meals.length, 1, "มื้ออาหารควรเพิ่มเป็น 1 มื้อ");
+      assert(activeMealId !== null, "activeMealId ไม่ควรเป็น null");
+      
+      const addedId = state.meals[0].id;
+      deleteMeal(addedId);
+      assertEquals(state.meals.length, 0, "มื้ออาหารควรว่างเปล่าหลังจากลบ");
+      assertEquals(activeMealId, null, "activeMealId ควรเป็น null");
+      
+      state.meals = origMeals;
+    });
+
+    test("Appends Quick Item foods to active meal text", async () => {
+      const origMeals = [...state.meals];
+      const origActive = activeMealId;
+      state.meals = [];
+      activeMealId = null;
+      
+      addFoodToActiveMeal("ข้าว 100g");
+      assertEquals(state.meals.length, 1, "ควรสร้างมื้ออาหารแรกอัตโนมัติ");
+      assertEquals(state.meals[0].foods.join(' '), "ข้าว 100g", "ข้อความอาหารในมื้อแรกควรตรงกัน");
+      
+      addFoodToActiveMeal("ไข่ 1");
+      assertEquals(state.meals[0].foods.join(' '), "ข้าว 100g ไข่ 1", "อาหารควรต่อท้ายด้วยช่องว่าง");
+      
+      state.meals = origMeals;
+      activeMealId = origActive;
+    });
+
+    test("Toggles cardio presets and handles custom text", async () => {
+      const origCardio = [...state.cardio];
+      state.cardio = [];
+      activeCardioActivity = null;
+      
+      selectCardioActivity("เดินวิ่ง");
+      assertEquals(activeCardioActivity, "เดินวิ่ง", "กิจกรรมที่เลือกควรเปลี่ยนเป็น เดินวิ่ง");
+      
+      selectCardioActivity("เดินวิ่ง");
+      assertEquals(activeCardioActivity, null, "กิจกรรมควรถูกยกเลิกการเลือก");
+      
+      selectCardioActivity("เดินวิ่ง");
+      selectCardioDuration("30 นาที");
+      assertEquals(state.cardio.length, 1, "ควรบันทึกคาร์ดิโอแล้ว 1 รายการ");
+      assertEquals(state.cardio[0], "เดินวิ่ง 30 นาที", "ข้อมูลบันทึกคาร์ดิโอควรตรงกัน");
+      
+      removeCardio(0);
+      assertEquals(state.cardio.length, 0, "คาร์ดิโอควรว่างหลังลบ");
+      
+      state.cardio = origCardio;
+      activeCardioActivity = null;
+    });
+
+    test("Toggles weight muscles and formats correctly", async () => {
+      const origWeight = [...state.weight];
+      state.weight = [];
+      
+      toggleWeightMuscle("อก");
+      assert(state.weight.includes("อก"), "ควรมี อก");
+      
+      toggleWeightMuscle("ไหล่");
+      assertEquals(state.weight.length, 2, "ควรมี 2 กลุ่มกล้ามเนื้อ");
+      
+      toggleWeightMuscle("อก");
+      assert(!state.weight.includes("อก"), "อก ควรถูกนำออก");
+      assertEquals(state.weight.length, 1, "ควรเหลือ 1 กลุ่มกล้ามเนื้อ");
+      assertEquals(state.weight[0], "ไหล่", "ที่เหลืออยู่ควรเป็น ไหล่");
+      
+      state.weight = origWeight;
+    });
+
+    test("Formats entire output matching template exactly", async () => {
+      const originalState = JSON.parse(JSON.stringify(state));
+      
+      state.date = "21 พค 2569";
+      state.water = 2000;
+      state.meals = [
+        { id: 1, time: "14:30", foods: ["ข้าว 200g", "ผัดสันในหมูพริกไทยดำ 120g", "ไข่ 1", "นมมก 0.5 ชต"] },
+        { id: 2, time: "18:00", foods: ["โอนิกิริ 1", "กล้วย 120g", "น้ำมะพร้าว 1 ขวด"] }
+      ];
+      state.cardio = ["เดินวิ่ง 30 นาที"];
+      state.weight = ["อก", "ไหล่", "หลัง"];
+      state.note = "วันนี้ติดงาน กินได้น้อยครับ ยุ่งจัดๆ";
+      state.photoLink = "https://";
+      
+      const expectedText = 
+`วันที่ 21 พค 2569
+อาหาร
+- มื้อแรก 14.30 ข้าว 200g ผัดสันในหมูพริกไทยดำ 120g ไข่ 1 นมมก 0.5 ชต
+- มื้อสอง 18.00 โอนิกิริ 1 กล้วย 120g น้ำมะพร้าว 1 ขวด
+- น้ำ 2000ml
+
+คาดิโอ: เดินวิ่ง 30 นาที
+เวท: อก ไหล่ หลัง
+
+วันนี้ติดงาน กินได้น้อยครับ ยุ่งจัดๆ
+
+รูป
+https://`;
+ 
+      assertEquals(formatOutput(), expectedText, "ข้อความจัดรูปแบบทั้งหมดไม่ตรงกับตัวอย่างที่กำหนด");
+      
+      state = originalState;
+    });
+
+
+    // Test runner execution function
+    async function runTests() {
+      const resultsContainer = document.getElementById('test-results');
+      resultsContainer.innerHTML = '';
+      let passed = 0;
+      for (const t of tests) {
+        const item = document.createElement('div');
+        item.className = 'test-item running';
+        item.textContent = `Running: ${t.name}...`;
+        resultsContainer.appendChild(item);
+        try {
+          await t.fn();
+          item.className = 'test-item pass';
+          item.textContent = `✓ ${t.name}`;
+          passed++;
+        } catch (err) {
+          item.className = 'test-item fail';
+          item.innerHTML = `✗ ${t.name}<pre>${err.stack || err.message}</pre>`;
+        }
+      }
+      const summary = document.createElement('div');
+      summary.className = `test-summary ${passed === tests.length ? 'all-pass' : 'some-fail'}`;
+      summary.textContent = `เสร็จสิ้นการทดสอบ: ผ่าน ${passed}/${tests.length} รายการ`;
+      resultsContainer.appendChild(summary);
+    }
+  </script>
+</body>
+</html>
