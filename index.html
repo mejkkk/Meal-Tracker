@@ -551,8 +551,10 @@
     <!-- Date Navigator in Header -->
     <div style="display: flex; align-items: center; gap: 0.3rem; background-color: var(--bg-color); padding: 0.15rem 0.35rem; border-radius: 4px; border: 1px solid var(--border-color);">
       <button class="btn" id="btn-prev-date" style="padding: 0 0.3rem; min-height: 22px; font-size: 0.7rem; border-radius: 3px; background: none; border: none; color: var(--text-main);">◀</button>
-      <span id="date-display" style="font-size: 0.8rem; font-weight: bold; min-width: 80px; text-align: center; color: var(--text-main); cursor: pointer; user-select: none;" title="คลิกเพื่อเลือกวันที่จากปฏิทิน">-</span>
-      <input type="date" id="hidden-date-picker" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; border: none; padding: 0;">
+      <div style="position: relative; display: inline-flex; align-items: center; justify-content: center;">
+        <span id="date-display" style="font-size: 0.8rem; font-weight: bold; min-width: 80px; text-align: center; color: var(--text-main); cursor: pointer; user-select: none;" title="คลิกเพื่อเลือกวันที่จากปฏิทิน">-</span>
+        <input type="date" id="hidden-date-picker" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; border: none; padding: 0; margin: 0; pointer-events: auto; -webkit-appearance: none; appearance: none; background: transparent;">
+      </div>
       <button class="btn" id="btn-next-date" style="padding: 0 0.3rem; min-height: 22px; font-size: 0.7rem; border-radius: 3px; background: none; border: none; color: var(--text-main);">▶</button>
     </div>
 
@@ -975,6 +977,17 @@
     "spaceBeforeUnit": false
   },
   {
+    "name": "ไข่ตุ๋นไก่",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
     "name": "ไก่ต้ม",
     "category": "meals",
     "minQty": 100,
@@ -1056,17 +1069,6 @@
     "category": "meals",
     "minQty": 60,
     "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไข่ตุ๋นไก่",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 200,
     "step": 10,
     "defaultQty": 120,
     "unit": "g",
@@ -3059,6 +3061,12 @@
       if (nextDateBtn) nextDateBtn.addEventListener('click', () => changeDate(1));
 
       if (dateDisplay && hiddenDatePicker) {
+        const syncDatePickerValue = () => {
+          hiddenDatePicker.value = getISODateString(currentDate);
+        };
+        hiddenDatePicker.addEventListener('click', syncDatePickerValue);
+        hiddenDatePicker.addEventListener('touchstart', syncDatePickerValue);
+
         dateDisplay.addEventListener('click', (e) => {
           e.stopPropagation();
           hiddenDatePicker.value = getISODateString(currentDate);
