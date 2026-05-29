@@ -67,29 +67,30 @@
     }
 
     header {
-      padding: 1rem 1.5rem;
+      padding: 0.5rem 1rem;
       border-bottom: 1px solid var(--border-color);
       display: flex;
       justify-content: space-between;
       align-items: center;
       background-color: var(--card-bg);
+      gap: 0.5rem;
     }
 
     h1 {
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: 1.1rem;
+      font-weight: 700;
       letter-spacing: -0.025em;
     }
 
     .theme-toggle-btn {
       background: none;
       border: none;
-      font-size: 1.5rem;
+      font-size: 1.1rem;
       cursor: pointer;
-      padding: 0.25rem;
+      padding: 0.2rem;
       border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -101,7 +102,7 @@
 
     .main-container {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1.2fr 0.8fr;
       flex: 1;
       overflow: hidden;
     }
@@ -114,20 +115,20 @@
     }
 
     .panel-input {
-      padding: 1.5rem;
+      padding: 0.75rem;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 1.5rem;
+      gap: 0.5rem;
     }
 
     .panel-preview {
-      padding: 1.5rem;
+      padding: 0.75rem;
       background-color: var(--bg-color);
       border-left: 1px solid var(--border-color);
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 0.5rem;
       overflow-y: auto;
     }
 
@@ -141,35 +142,47 @@
     .card {
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
-      border-radius: 12px;
-      padding: 1.25rem;
+      border-radius: 6px;
+      padding: 0.65rem;
       box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
     }
 
+    .input-row-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    @media (max-width: 480px) {
+      .input-row-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .card-title {
-      font-size: 0.95rem;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--text-sub);
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.35rem;
     }
 
     /* Buttons utilities */
     .btn {
-      padding: 0.5rem 1rem;
+      padding: 0.25rem 0.5rem;
       border: 1px solid var(--border-color);
       background-color: var(--btn-bg);
       color: var(--btn-text);
-      border-radius: 8px;
-      font-size: 0.9rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
       font-weight: 500;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
-      min-height: 44px; /* Touch target */
+      gap: 0.3rem;
+      min-height: 30px; /* Touch target */
     }
 
     .btn:active {
@@ -208,13 +221,13 @@
       background-color: var(--btn-bg);
       border: 1px solid var(--border-color);
       color: var(--text-main);
-      padding: 0.25rem 0.55rem;
-      border-radius: 8px;
-      font-size: 0.85rem;
+      padding: 0.2rem 0.45rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.2rem;
       white-space: nowrap;
       user-select: none;
     }
@@ -267,25 +280,25 @@
       justify-content: center;
       align-items: center;
       gap: 1rem;
-      height: 96px; /* Show exactly 3 rows of 32px */
+      height: 84px; /* Show exactly 3 rows of 28px */
       background: var(--bg-color);
-      border-radius: 8px;
+      border-radius: 6px;
       border: 1px solid var(--border-color);
       position: relative;
       overflow: hidden;
       user-select: none;
       width: 100%;
       max-width: 280px;
-      margin: 0.5rem auto 0;
+      margin: 0.4rem auto 0;
     }
 
     /* Center selection bar overlay */
     .picker-selection-bar {
       position: absolute;
-      top: 32px; /* height / 3 */
+      top: 28px; /* height / 3 */
       left: 0;
       width: 100%;
-      height: 32px; /* one row height */
+      height: 28px; /* one row height */
       border-top: 1px solid var(--pastel-lavender);
       border-bottom: 1px solid var(--pastel-lavender);
       background-color: rgba(216, 180, 254, 0.05);
@@ -312,14 +325,14 @@
 
     /* Padding to allow centering first and last items */
     .picker-padding {
-      height: 32px;
+      height: 28px;
     }
 
     /* Picker items */
     .picker-item {
-      height: 32px;
-      line-height: 32px;
-      font-size: 0.9rem;
+      height: 28px;
+      line-height: 28px;
+      font-size: 0.85rem;
       font-weight: 500;
       color: var(--text-sub);
       scroll-snap-align: center;
@@ -329,17 +342,20 @@
 
     .picker-item.selected {
       color: var(--pastel-lavender);
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       font-weight: 700;
     }
 
-    /* Hide scrollbars for horizontal portion selectors */
-    #qty-buttons-grid::-webkit-scrollbar {
+    /* Hide scrollbars for horizontal portion selectors and cardio duration list */
+    #qty-buttons-grid::-webkit-scrollbar,
+    #cardio-duration-container::-webkit-scrollbar {
       display: none;
     }
-    #qty-buttons-grid {
+    #qty-buttons-grid,
+    #cardio-duration-container {
       scrollbar-width: none;
     }
+
 
 
     /* Toast Notification styles */
@@ -468,6 +484,61 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
+    /* Food Menu Tabs & Filter styles */
+    .menu-tabs {
+      display: flex;
+      overflow-x: auto;
+      gap: 0.35rem;
+      margin-bottom: 0.35rem;
+      scrollbar-width: none; /* สำหรับ Firefox */
+      -webkit-overflow-scrolling: touch;
+      padding: 0.1rem 0;
+    }
+    .menu-tabs::-webkit-scrollbar {
+      display: none; /* สำหรับ Chrome/Safari */
+    }
+    .menu-tab-btn {
+      padding: 0.25rem 0.6rem;
+      font-size: 0.78rem;
+      font-weight: 600;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background-color: var(--bg-color);
+      color: var(--text-sub);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+      min-height: 28px;
+    }
+    .menu-tab-btn:hover {
+      background-color: var(--btn-bg);
+      color: var(--text-main);
+    }
+    .menu-tab-btn.active {
+      background-color: var(--pastel-mint);
+      color: #121214;
+      border-color: transparent;
+    }
+    .food-filter-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.35rem;
+    }
+    .food-filter-input {
+      width: 100%;
+      padding: 0.35rem 0.5rem;
+      font-size: 0.8rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      min-height: 32px;
+    }
+    .food-filter-input:focus {
+      outline: none;
+      border-color: var(--pastel-mint);
+    }
+
   </style>
 </head>
 <body>
@@ -475,6 +546,14 @@
   <!-- Main Application Header -->
   <header>
     <h1 id="app-title">Meal Tracker 🥣</h1>
+    
+    <!-- Date Navigator in Header -->
+    <div style="display: flex; align-items: center; gap: 0.3rem; background-color: var(--bg-color); padding: 0.15rem 0.35rem; border-radius: 4px; border: 1px solid var(--border-color);">
+      <button class="btn" id="btn-prev-date" style="padding: 0 0.3rem; min-height: 22px; font-size: 0.7rem; border-radius: 3px; background: none; border: none; color: var(--text-main);">◀</button>
+      <span id="date-display" style="font-size: 0.8rem; font-weight: bold; min-width: 80px; text-align: center; color: var(--text-main);">-</span>
+      <button class="btn" id="btn-next-date" style="padding: 0 0.3rem; min-height: 22px; font-size: 0.7rem; border-radius: 3px; background: none; border: none; color: var(--text-main);">▶</button>
+    </div>
+
     <button class="theme-toggle-btn" id="theme-toggle-btn" aria-label="Toggle Theme">🌙</button>
   </header>
 
@@ -482,113 +561,116 @@
   <main class="main-container" id="app-main">
     <!-- Left panel: Inputs -->
     <div class="panel-input">
-      <!-- Section: Date -->
-      <div class="card" style="padding: 1rem 1.25rem;">
-        <h2 class="card-title" style="margin-bottom: 0.5rem; font-size: 0.85rem;">วันที่บันทึก (Date)</h2>
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;">
-          <button class="btn" id="btn-prev-date" style="padding: 0.25rem 0.6rem; min-height: 32px; font-size: 0.85rem;">◀</button>
-          <div id="date-display" style="font-size: 0.95rem; font-weight: bold; text-align: center; flex: 1; color: var(--text-main);">-</div>
-          <button class="btn" id="btn-next-date" style="padding: 0.25rem 0.6rem; min-height: 32px; font-size: 0.85rem;">▶</button>
-        </div>
-      </div>
-
-
       <!-- Section: Meals & Food Menu -->
-      <div class="card" style="display: flex; flex-direction: column; gap: 1rem;">
-        <h2 class="card-title" style="margin-bottom: 0.25rem;">มื้ออาหาร (Meals)</h2>
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.15rem;">
+          <h2 class="card-title" style="margin-bottom: 0;">มื้ออาหาร (Meals)</h2>
+          <button class="btn btn-primary" id="btn-add-meal" style="min-height: 26px; font-size: 0.75rem; padding: 0.2rem 0.5rem; width: auto; margin-top: 0;">➕ เพิ่มมื้ออาหาร</button>
+        </div>
         
         <!-- Meals List -->
-        <div id="meals-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+        <div id="meals-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
           <!-- Meal Items Rendered here -->
         </div>
 
         <!-- Food Menu Section (Hidden until a meal is added) -->
-        <div id="food-menu-section" style="border-top: 1px solid var(--border-color); padding-top: 1rem; margin-top: 0.5rem; display: none; flex-direction: column; gap: 0.75rem;">
-          <h3 style="font-size: 0.85rem; font-weight: 600; color: var(--text-sub); margin-bottom: 0.25rem; text-transform: uppercase;">เมนูอาหาร</h3>
+        <div id="food-menu-section" style="border-top: 1px solid var(--border-color); padding-top: 0.75rem; margin-top: 0.25rem; display: none; flex-direction: column; gap: 0.5rem;">
+          <h3 style="font-size: 0.8rem; font-weight: 600; color: var(--text-sub); margin-bottom: 0.15rem; text-transform: uppercase;">เมนูอาหาร</h3>
           
-          <!-- Food Menu Grid -->
-          <div id="quick-foods-grid" style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.25rem;">
+          <!-- แถบหมวดหมู่ 6 แท็บ -->
+          <div class="menu-tabs" id="menu-tabs-container"></div>
+
+          <!-- ช่องกรองค้นหาข้อมูล -->
+          <div class="food-filter-container">
+            <input type="text" id="food-filter-input" placeholder="🔍 พิมพ์เพื่อค้นหาข้ามหมวดหมู่..." class="food-filter-input">
+          </div>
+
+          <!-- กล่องแสดงแท็กแบบมี Scroll แนวตั้ง -->
+          <div id="quick-foods-grid" style="display: flex; flex-wrap: wrap; gap: 0.35rem; max-height: 130px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.45rem; background-color: var(--bg-color); margin-bottom: 0.15rem;">
             <!-- Rendered food tags -->
           </div>
 
           <!-- Quantity Options (Inline) -->
-          <div id="quantity-options-container" style="display: flex; flex-direction: column; gap: 0.4rem; background-color: var(--bg-color); padding: 0.5rem; border-radius: 8px; border: 1px solid var(--border-color);">
-            <span style="font-size: 0.8rem; color: var(--text-sub);" id="qty-instructions-label">กรุณาเลือกเมนูอาหารด้านบนก่อน</span>
-            <div id="qty-buttons-grid" style="display: flex; overflow-x: auto; gap: 0.4rem; display: none; padding: 0.25rem 0; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
+          <div id="quantity-options-container" style="display: flex; flex-direction: column; gap: 0.35rem; background-color: var(--bg-color); padding: 0.4rem; border-radius: 6px; border: 1px solid var(--border-color);">
+            <span style="font-size: 0.75rem; color: var(--text-sub);" id="qty-instructions-label">กรุณาเลือกเมนูอาหารด้านบนก่อน</span>
+            <div id="qty-buttons-grid" style="display: flex; overflow-x: auto; gap: 0.35rem; display: none; padding: 0.15rem 0; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
               <!-- Rendered quantity buttons dynamically -->
             </div>
-
           </div>
 
           <!-- Custom Food Input -->
-          <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.25rem;">
-            <input type="text" id="input-new-food" placeholder="ระบุเอง เช่น กระเพราไก่ 150 กรัม" style="flex: 1; padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); font-size: 0.85rem;">
-            <button class="btn" id="btn-add-custom-food" style="min-height: 38px; padding: 0 0.75rem; font-size: 0.85rem;">เพิ่ม</button>
+          <div style="display: flex; gap: 0.4rem; align-items: center; margin-top: 0.15rem;">
+            <input type="text" id="input-new-food" placeholder="ระบุเอง เช่น กระเพราไก่ 150 กรัม" style="flex: 1; padding: 0.35rem 0.5rem; border-radius: 6px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); font-size: 0.82rem; min-height: 34px;">
+            <button class="btn" id="btn-add-custom-food" style="min-height: 34px; padding: 0 0.6rem; font-size: 0.82rem;">เพิ่ม</button>
           </div>
         </div>
-
-        <button class="btn btn-primary" id="btn-add-meal" style="margin-top: 0.5rem;">➕ เพิ่มมื้ออาหาร</button>
       </div>
+
 
       <!-- Section: Water -->
-      <div class="card">
-        <h2 class="card-title">ปริมาณน้ำดื่ม (Water Intake)</h2>
-        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
-          <button class="btn" id="btn-water-minus" style="font-size: 1.1rem; width: 60px;">-100</button>
-          <div style="font-size: 1.4rem; font-weight: bold; text-align: center; flex: 1;">
-            <span id="water-display">2000</span> <span style="font-size: 0.95rem; font-weight: normal; color: var(--text-sub);">ml</span>
+      <div class="card" style="display: flex; align-items: center; justify-content: space-between; padding: 0.4rem 0.65rem;">
+        <h2 class="card-title" style="margin-bottom: 0; font-size: 0.75rem; text-transform: uppercase;">ปริมาณน้ำดื่ม (Water Intake)</h2>
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <button class="btn" id="btn-water-minus" style="font-size: 0.85rem; width: 26px; height: 26px; min-height: 26px; border-radius: 50%; padding: 0; display: inline-flex; align-items: center; justify-content: center;">-</button>
+          <div style="font-size: 1rem; font-weight: bold; min-width: 60px; text-align: center;">
+            <span id="water-display">2000</span> <span style="font-size: 0.75rem; font-weight: normal; color: var(--text-sub);">ml</span>
           </div>
-          <button class="btn" id="btn-water-plus" style="font-size: 1.1rem; width: 60px;">+100</button>
+          <button class="btn" id="btn-water-plus" style="font-size: 0.85rem; width: 26px; height: 26px; min-height: 26px; border-radius: 50%; padding: 0; display: inline-flex; align-items: center; justify-content: center;">+</button>
         </div>
       </div>
 
+
       <!-- Section: Cardio -->
-      <div class="card" style="display: flex; flex-direction: column; gap: 0.75rem;">
-        <h2 class="card-title" style="margin-bottom: 0.25rem;">คาร์ดิโอ (Cardio)</h2>
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <h2 class="card-title" style="margin-bottom: 0.15rem;">คาร์ดิโอ (Cardio)</h2>
         
         <!-- Logged Cardios list -->
-        <div id="cardio-logs-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem; min-height: 38px; padding: 0.4rem; border: 1px solid var(--border-color); border-radius: 6px; background-color: var(--bg-color);">
+        <div id="cardio-logs-container" style="display: flex; flex-wrap: wrap; gap: 0.35rem; min-height: 32px; padding: 0.35rem; border: 1px solid var(--border-color); border-radius: 6px; background-color: var(--bg-color);">
           <!-- Rendered cardio tags -->
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.4rem; margin-top: 0.25rem;">
-          <span style="font-size: 0.8rem; color: var(--text-sub);">ประเภทกิจกรรม:</span>
-          <div id="cardio-activity-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.3rem; margin-top: 0.15rem;">
+          <span style="font-size: 0.75rem; color: var(--text-sub);">ประเภทกิจกรรม:</span>
+          <div id="cardio-activity-container" style="display: flex; flex-wrap: wrap; gap: 0.35rem;">
             <!-- Rendered buttons -->
           </div>
         </div>
 
-        <div style="display: flex; flex-direction: column; gap: 0.4rem;">
-          <span style="font-size: 0.8rem; color: var(--text-sub);">เวลา (นาที):</span>
-          <div id="cardio-duration-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
+        <div style="display: flex; flex-direction: column; gap: 0.3rem;">
+          <span style="font-size: 0.75rem; color: var(--text-sub);">เวลา (นาที):</span>
+          <div id="cardio-duration-container" style="display: flex; overflow-x: auto; flex-wrap: nowrap; gap: 0.35rem; padding: 0.15rem 0; scroll-behavior: smooth; -webkit-overflow-scrolling: touch;">
             <!-- Rendered buttons -->
           </div>
         </div>
+
         
-        <div style="display: flex; gap: 0.5rem; align-items: center; margin-top: 0.25rem;">
-          <input type="text" id="input-custom-cardio" placeholder="ระบุเอง เช่น ปั่นจักรยาน 40 นาที" style="flex: 1; padding: 0.4rem 0.5rem; border-radius: 8px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); font-size: 0.85rem;">
-          <button class="btn" id="btn-add-custom-cardio" style="min-height: 34px; padding: 0 0.75rem; font-size: 0.85rem;">เพิ่ม</button>
+        <div style="display: flex; gap: 0.4rem; align-items: center; margin-top: 0.15rem;">
+          <input type="text" id="input-custom-cardio" placeholder="ระบุเอง เช่น ปั่นจักรยาน 40 นาที" style="flex: 1; padding: 0.35rem 0.5rem; border-radius: 6px; border: 1px solid var(--border-color); background-color: var(--bg-color); color: var(--text-main); font-size: 0.82rem; min-height: 34px;">
+          <button class="btn" id="btn-add-custom-cardio" style="min-height: 34px; padding: 0 0.6rem; font-size: 0.82rem;">เพิ่ม</button>
         </div>
       </div>
 
       <!-- Section: Weight Training -->
-      <div class="card" style="display: flex; flex-direction: column; gap: 0.75rem;">
-        <h2 class="card-title" style="margin-bottom: 0.25rem;">เวทเทรนนิ่ง (Weight Training)</h2>
-        <div id="weight-muscles-container" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.5rem;">
+        <h2 class="card-title" style="margin-bottom: 0.15rem;">เวทเทรนนิ่ง (Weight Training)</h2>
+        <div id="weight-muscles-container" style="display: flex; flex-wrap: wrap; gap: 0.4rem;">
           <!-- Toggles for muscles -->
         </div>
       </div>
 
-      <!-- Section: Note -->
-      <div class="card" style="display: flex; flex-direction: column; gap: 0.5rem;">
-        <h2 class="card-title" style="margin-bottom: 0.25rem;">โน้ตเพิ่มเติม (Note)</h2>
-        <textarea id="input-note" placeholder="วันนี้ติดงาน กินได้น้อยครับ ยุ่งจัดๆ..." style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem; background-color: var(--card-bg); color: var(--text-main); font-size: 0.9rem; min-height: 80px; resize: vertical;"></textarea>
-      </div>
-
-      <!-- Section: Photo Link -->
-      <div class="card" style="display: flex; flex-direction: column; gap: 0.5rem;">
-        <h2 class="card-title" style="margin-bottom: 0.25rem;">ลิงก์รูปภาพ (Photo Link)</h2>
-        <input type="text" id="input-photo-link" placeholder="วางลิงก์โฟลเดอร์รูปภาพ เช่น Google Drive" style="width: 100%; border: 1px solid var(--border-color); border-radius: 8px; padding: 0.5rem; background-color: var(--card-bg); color: var(--text-main); font-size: 0.9rem;">
+      <!-- Section: Note & Photo Link -->
+      <div class="card" style="display: flex; flex-direction: column; gap: 0.6rem;">
+        <div>
+          <h2 class="card-title" style="margin-bottom: 0.3rem;">โน้ตเพิ่มเติม (Note)</h2>
+          <textarea id="input-note" placeholder="วันนี้ติดงาน กินได้น้อยครับ ยุ่งจัดๆ..." style="width: 100%; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.4rem 0.5rem; background-color: var(--bg-color); color: var(--text-main); font-size: 0.85rem; min-height: 60px; resize: vertical;"></textarea>
+        </div>
+        <div style="border-top: 1px solid var(--border-color); padding-top: 0.6rem;">
+          <h2 class="card-title" style="margin-bottom: 0.3rem;">ลิงก์รูปภาพ (Photo Link)</h2>
+          <div style="display: flex; gap: 0.4rem; align-items: center;">
+            <input type="text" id="input-photo-link" placeholder="วางลิงก์โฟลเดอร์รูปภาพ เช่น Google Drive" style="flex: 1; border: 1px solid var(--border-color); border-radius: 6px; padding: 0.4rem 0.5rem; background-color: var(--bg-color); color: var(--text-main); font-size: 0.85rem; min-height: 34px;">
+            <button class="btn" id="btn-paste-photo" style="min-height: 34px; padding: 0 0.75rem; font-size: 0.85rem; white-space: nowrap;">วาง</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -648,17 +730,1393 @@
     // CONFIGURATION: แก้ไขเมนูอาหารเริ่มต้นและปริมาณหน่วยที่นี่ได้เลยครับ
     // =================================================================
     const DEFAULT_FOOD_ITEMS = [
-      { name: "ข้าว", minQty: 80, maxQty: 300, step: 10, defaultQty: 150, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
-      { name: "ผัดสันในหมูพริกไทยดำ", minQty: 50, maxQty: 200, step: 10, defaultQty: 100, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
-      { name: "ไข่", minQty: 1, maxQty: 5, step: 1, defaultQty: 1, unit: "", displayUnit: "ฟอง", spaceBeforeUnit: false },
-      { name: "นมมก", minQty: 0.5, maxQty: 3.0, step: 0.5, defaultQty: 1.0, unit: "ชต", displayUnit: "ชต", spaceBeforeUnit: true },
-      { name: "โอนิกิริ", minQty: 1, maxQty: 3, step: 1, defaultQty: 1, unit: "", displayUnit: "ชิ้น", spaceBeforeUnit: false },
-      { name: "กล้วย", minQty: 50, maxQty: 150, step: 10, defaultQty: 100, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
-      { name: "น้ำมะพร้าว", minQty: 1, maxQty: 3, step: 1, defaultQty: 1, unit: "ขวด", displayUnit: "ขวด", spaceBeforeUnit: true },
-      { name: "โยเกิร์ต", minQty: 1, maxQty: 3, step: 1, defaultQty: 1, unit: "", displayUnit: "ถ้วย", spaceBeforeUnit: false },
-      { name: "อัลม่อน", minQty: 10, maxQty: 100, step: 10, defaultQty: 20, unit: "g", displayUnit: "g", spaceBeforeUnit: false },
-      { name: "นม", minQty: 100, maxQty: 350, step: 50, defaultQty: 150, unit: "ml", displayUnit: "ml", spaceBeforeUnit: false }
+  {
+    "name": "ขนมปัง",
+    "category": "carbs",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 2,
+    "unit": "",
+    "displayUnit": "แผ่น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ขนมปังซาวโด",
+    "category": "carbs",
+    "minQty": 25,
+    "maxQty": 75,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ขนมปังลูกเกด",
+    "category": "carbs",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชิ้น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ขนมมันปิ้ง",
+    "category": "carbs",
+    "minQty": 2,
+    "maxQty": 6,
+    "step": 1,
+    "defaultQty": 4,
+    "unit": "",
+    "displayUnit": "ลูก",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ข้าว",
+    "category": "carbs",
+    "minQty": 80,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ข้าวโพดและถั่วแระ",
+    "category": "carbs",
+    "minQty": 65,
+    "maxQty": 195,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ข้าวเหนียว",
+    "category": "carbs",
+    "minQty": 75,
+    "maxQty": 225,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ข้าวโอ๊ต",
+    "category": "carbs",
+    "minQty": 10,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 10,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แผ่นแป้ง",
+    "category": "carbs",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "แผ่น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ฟักทอง",
+    "category": "carbs",
+    "minQty": 95,
+    "maxQty": 135,
+    "step": 10,
+    "defaultQty": 115,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "มันหวาน",
+    "category": "carbs",
+    "minQty": 65,
+    "maxQty": 130,
+    "step": 10,
+    "defaultQty": 65,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "โรล",
+    "category": "carbs",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 2,
+    "unit": "",
+    "displayUnit": "ชิ้น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "โอนิกิริ",
+    "category": "carbs",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชิ้น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "บะหมี่เกี๊ยวหมูแดง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชาม",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ขนมจีนน้ำยา",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "จาน",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราตับ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราเต้าหู้",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 280,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราไก่",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราไก่ไข่เยี่ยวม้า",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะหรี่ไก่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กุ้ง",
+    "category": "meals",
+    "minQty": 30,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กุ้งผัดพริกแกง",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เกาเหลาไก่ตุ๋นมะระ",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ถ้วย",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เกาเหลาหมูต้มยำ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แกงปลานิลใบยอ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 80,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แกงส้มกุ้ง",
+    "category": "meals",
+    "minQty": 25,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่กระเทียม",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ต้ม",
+    "category": "meals",
+    "minQty": 100,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ทอดหม้อทอดไร้น้ำมัน",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดกะหล่ำ",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดซอสญี่ปุ่น",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดผงกะหรี่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดหน่อไม้ฝรั่ง",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดหอม",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดหอมใหญ่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ย่าง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ย่างห้าดาว",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ย่างห้าดาวลอกหนัง",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่เจียวไก่",
+    "category": "meals",
+    "minQty": 30,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 60,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่ตุ๋น",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 2,
+    "unit": "",
+    "displayUnit": "ถ้วย",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่ตุ๋นกุ้ง",
+    "category": "meals",
+    "minQty": 25,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่ตุ๋นไก่",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "คอหมูย่าง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "คะน้าปลากระป๋อง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "จาน",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "คากิ",
+    "category": "meals",
+    "minQty": 10,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 30,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ชายสี่หมี่เกี๊ยวแห้งหมูแดง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชาม",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ซูชิ",
+    "category": "meals",
+    "minQty": 5,
+    "maxQty": 9,
+    "step": 1,
+    "defaultQty": 7,
+    "unit": "",
+    "displayUnit": "คำ",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แซนวิชพอร์คชอปโทส",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "อัน",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มกระดูกอ่อนหมู",
+    "category": "meals",
+    "minQty": 65,
+    "maxQty": 195,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มจืดไก่",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มจืดไก่ใส่ตับ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มมะระไก่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มยำเนื้อตุ๋น",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มยำปลา",
+    "category": "meals",
+    "minQty": 100,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 200,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มเลือดหมู",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ถ้วย",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เต้าหู้เหลือง",
+    "category": "meals",
+    "minQty": 140,
+    "maxQty": 420,
+    "step": 10,
+    "defaultQty": 280,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เต้าหู้เหลืองนิ่ม",
+    "category": "meals",
+    "minQty": 140,
+    "maxQty": 420,
+    "step": 50,
+    "defaultQty": 280,
+    "unit": "ml",
+    "displayUnit": "ml",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ทูน่า",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ทูน่าผัดซีอิ๊ว",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ธัญพืชรวม",
+    "category": "meals",
+    "minQty": 65,
+    "maxQty": 195,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "น้ำตก",
+    "category": "meals",
+    "minQty": 25,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เบนโต๊ะ",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "กล่อง",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลากระป๋อง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "กระป๋อง",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลานิล",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลานิลนึ่ง",
+    "category": "meals",
+    "minQty": 75,
+    "maxQty": 225,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลาผัดพริกสด",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลาส้มทอด",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เป็ดพะโล้",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดซีอิ๊วไก่",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดแตงกวาไก่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดปลากระป๋อง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "จาน",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดปลากระป๋องใส่ถั่วงอก",
+    "category": "meals",
+    "minQty": 0.5,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 0.5,
+    "unit": "",
+    "displayUnit": "จาน",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดผักบุ้ง",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดผักบุ้งไก่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดสันในหมูพริกไทยดำ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ยำทูน่า",
+    "category": "meals",
+    "minQty": 10,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 30,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ลาบตับ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ลาบทูน่า",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ลาบหมูตับ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ลูกชิ้นเนื้อ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันใน",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในกระเทียม",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในผัดถั่ว",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในผัดพริกแกง",
+    "category": "meals",
+    "minQty": 110,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในพริกไทย",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในย่าง",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในหมูพริกไทย",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในหมูย่าง",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในหมูอบ",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สามชั้นจากพืช",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "หมกใบยอทำเอง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ห่อ",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "หมูกรอบ",
+    "category": "meals",
+    "minQty": 25,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "หมูกรอบทำเอง",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "หมูกระดูกอ่อน",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "หมูกระเทียมพริกไทย",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "หมูผัด",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ห่อมกกุ้งทำเอง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชิ้น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ฟอง",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่ดาว",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ฟอง",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่พะโล้",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ฟอง",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แคปหมู",
+    "category": "meals",
+    "minQty": 5,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 14,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะหรี่ปั๊บ",
+    "category": "desserts",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชิ้น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ขนมเค้ก",
+    "category": "desserts",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชิ้น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "โดรายากิ",
+    "category": "desserts",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ชิ้น",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ทาโร่",
+    "category": "desserts",
+    "minQty": 10,
+    "maxQty": 40,
+    "step": 10,
+    "defaultQty": 20,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เอแคร์",
+    "category": "desserts",
+    "minQty": 4,
+    "maxQty": 8,
+    "step": 1,
+    "defaultQty": 6,
+    "unit": "",
+    "displayUnit": "ลูก",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ชาส้ม",
+    "category": "drinks",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "แก้ว",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "นม",
+    "category": "drinks",
+    "minQty": 100,
+    "maxQty": 350,
+    "step": 50,
+    "defaultQty": 150,
+    "unit": "ml",
+    "displayUnit": "ml",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "นมเปรี้ยว",
+    "category": "drinks",
+    "minQty": 150,
+    "maxQty": 450,
+    "step": 50,
+    "defaultQty": 300,
+    "unit": "ml",
+    "displayUnit": "ml",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "น้ำมะพร้าว",
+    "category": "drinks",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "ขวด",
+    "displayUnit": "ขวด",
+    "spaceBeforeUnit": true
+  },
+  {
+    "name": "เวย์โปรตีน",
+    "category": "drinks",
+    "minQty": 100,
+    "maxQty": 500,
+    "step": 50,
+    "defaultQty": 350,
+    "unit": "ml",
+    "displayUnit": "ml",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กล้วย",
+    "category": "fruits",
+    "minQty": 1,
+    "maxQty": 130,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": true
+  },
+  {
+    "name": "แก้วมังกร",
+    "category": "fruits",
+    "minQty": 100,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 200,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แคนตาลูป",
+    "category": "fruits",
+    "minQty": 110,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "พุทราชีส",
+    "category": "fruits",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ลูก",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เมล่อน",
+    "category": "fruits",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สับปะรด",
+    "category": "fruits",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สาลี่",
+    "category": "fruits",
+    "minQty": 100,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 200,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แอปเปิ้ล",
+    "category": "fruits",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "นมมก",
+    "category": "extras",
+    "minQty": 0.5,
+    "maxQty": 3,
+    "step": 0.5,
+    "defaultQty": 0.5,
+    "unit": "ชต",
+    "displayUnit": "ชต",
+    "spaceBeforeUnit": true
+  },
+  {
+    "name": "เนยถั่ว",
+    "category": "extras",
+    "minQty": 5,
+    "maxQty": 50,
+    "step": 5,
+    "defaultQty": 20,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เมล็ดเจีย",
+    "category": "extras",
+    "minQty": 10,
+    "maxQty": 30,
+    "step": 10,
+    "defaultQty": 10,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "โยเกิร์ต",
+    "category": "extras",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ถ้วย",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "อัลม่อน",
+    "category": "extras",
+    "minQty": 5,
+    "maxQty": 50,
+    "step": 5,
+    "defaultQty": 20,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  }
+];
+
+    const FOOD_CATEGORIES = [
+      { id: "carbs", name: "คาร์ป" },
+      { id: "meals", name: "อาหาร" },
+      { id: "extras", name: "เสริม" },
+      { id: "fruits", name: "ผลไม้" },
+      { id: "drinks", name: "เครื่องดื่ม" },
+      { id: "desserts", name: "ของหวาน" }
     ];
+
+    let activeCategory = "carbs";
 
 
     const THAI_MONTHS = ["มค", "กพ", "มีค", "เมย", "พค", "มิย", "กค", "สค", "กย", "ตค", "พย", "ธค"];
@@ -780,8 +2238,17 @@
         foods: []
       });
       activeMealId = newId;
+      
+      // Reset category selection to carbs and clear search input when adding a meal
+      activeCategory = "carbs";
+      const filterInput = document.getElementById('food-filter-input');
+      if (filterInput) {
+        filterInput.value = '';
+      }
+      
       saveState();
       renderMeals();
+      renderMenuTabs();
       renderFoodMenu();
       renderQuantityOptions();
       updatePreview();
@@ -834,7 +2301,7 @@
         const mIdx = minItems.findIndex(item => item.getAttribute('data-val') === m);
         
         if (hIdx !== -1) {
-          const targetScroll = hIdx * 40;
+          const targetScroll = hIdx * 28;
           if (Math.abs(hourCol.scrollTop - targetScroll) > 5) {
             hourCol.scrollTop = targetScroll;
           }
@@ -845,7 +2312,7 @@
         }
         
         if (mIdx !== -1) {
-          const targetScroll = mIdx * 40;
+          const targetScroll = mIdx * 28;
           if (Math.abs(minCol.scrollTop - targetScroll) > 5) {
             minCol.scrollTop = targetScroll;
           }
@@ -870,7 +2337,15 @@
         return;
       }
       
-      if (foodMenuSection) foodMenuSection.style.display = 'flex';
+      const hasAnyTimePickerOpen = state.meals.some(m => m.showTimePicker);
+      if (foodMenuSection) {
+        if (hasAnyTimePickerOpen) {
+          foodMenuSection.style.display = 'none';
+        } else {
+          foodMenuSection.style.display = 'flex';
+        }
+      }
+
       
       state.meals.forEach((meal, index) => {
         const mealName = getMealName(index);
@@ -878,12 +2353,12 @@
         card.className = 'meal-item';
         card.setAttribute('data-id', meal.id);
         card.style.border = '1px solid var(--border-color)';
-        card.style.borderRadius = '8px';
-        card.style.padding = '0.75rem';
+        card.style.borderRadius = '6px';
+        card.style.padding = '0.5rem';
         card.style.backgroundColor = 'var(--card-bg)';
         card.style.display = 'flex';
         card.style.flexDirection = 'column';
-        card.style.gap = '0.5rem';
+        card.style.gap = '0.4rem';
         card.style.cursor = 'pointer';
         
         // Highlight active meal card
@@ -910,10 +2385,10 @@
         header.style.justifyContent = 'space-between';
         header.style.alignItems = 'center';
         header.innerHTML = `
-          <span style="font-weight: 600; font-size: 0.95rem;">${mealName}</span>
-          <div style="display: flex; align-items: center; gap: 0.5rem;">
-            <span class="meal-time-badge" style="background-color: var(--btn-bg); padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.85rem; font-weight: 500; cursor: pointer;">⏱️ ${formattedTime}</span>
-            <button class="btn-delete-meal" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 0.2rem; min-height: auto;">❌</button>
+          <span style="font-weight: 600; font-size: 0.9rem;">${mealName}</span>
+          <div style="display: flex; align-items: center; gap: 0.4rem;">
+            <span class="meal-time-badge" style="background-color: var(--btn-bg); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.8rem; font-weight: 500; cursor: pointer;">⏱️ ${formattedTime}</span>
+            <button class="btn-delete-meal" style="background: none; border: none; color: #ef4444; cursor: pointer; padding: 0.15rem; min-height: auto;">❌</button>
           </div>
         `;
         
@@ -941,31 +2416,31 @@
         const foodsContainer = document.createElement('div');
         foodsContainer.style.display = 'flex';
         foodsContainer.style.flexWrap = 'wrap';
-        foodsContainer.style.gap = '0.4rem';
-        foodsContainer.style.minHeight = '38px';
-        foodsContainer.style.padding = '0.4rem';
+        foodsContainer.style.gap = '0.3rem';
+        foodsContainer.style.minHeight = '32px';
+        foodsContainer.style.padding = '0.25rem';
         foodsContainer.style.border = '1px solid var(--border-color)';
         foodsContainer.style.borderRadius = '6px';
         foodsContainer.style.backgroundColor = 'var(--bg-color)';
         
         if (!meal.foods || meal.foods.length === 0) {
-          foodsContainer.innerHTML = `<span style="font-size: 0.82rem; color: var(--text-sub); align-self: center; padding-left: 0.25rem;">ยังไม่มีรายการอาหาร แตะเมนูอาหารด้านล่างเพื่อเพิ่ม</span>`;
+          foodsContainer.innerHTML = `<span style="font-size: 0.8rem; color: var(--text-sub); align-self: center; padding-left: 0.2rem;">ยังไม่มีรายการอาหาร แตะเมนูอาหารด้านล่างเพื่อเพิ่ม</span>`;
         } else {
           meal.foods.forEach((foodText, foodIdx) => {
             const badge = document.createElement('span');
             badge.style.display = 'inline-flex';
             badge.style.alignItems = 'center';
-            badge.style.gap = '0.25rem';
+            badge.style.gap = '0.2rem';
             badge.style.backgroundColor = 'var(--btn-bg)';
             badge.style.border = '1px solid var(--border-color)';
             badge.style.color = 'var(--text-main)';
-            badge.style.padding = '0.2rem 0.5rem';
+            badge.style.padding = '0.15rem 0.4rem';
             badge.style.borderRadius = '6px';
-            badge.style.fontSize = '0.85rem';
+            badge.style.fontSize = '0.8rem';
             
             badge.innerHTML = `
               <span>${foodText}</span>
-              <span class="remove-food" style="color: #ef4444; font-weight: bold; cursor: pointer; padding-left: 0.2rem;">&times;</span>
+              <span class="remove-food" style="color: #ef4444; font-weight: bold; cursor: pointer; padding-left: 0.15rem;">&times;</span>
             `;
             
             badge.querySelector('.remove-food').addEventListener('click', (e) => {
@@ -993,28 +2468,29 @@
         const minOptions = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
         
         timeSelector.innerHTML = `
-          <div class="picker-container" style="height: 96px;">
-            <div class="picker-selection-bar" style="top: 32px; height: 32px;"></div>
+          <div class="picker-container" style="height: 84px;">
+            <div class="picker-selection-bar" style="top: 28px; height: 28px;"></div>
             
             <!-- Hours Column -->
             <div class="picker-column hour-column">
-              <div class="picker-padding" style="height: 32px;"></div>
-              ${hourOptions.map(h => `<div class="picker-item" style="height:32px; line-height:32px;" data-val="${h}">${h}</div>`).join('')}
-              <div class="picker-padding" style="height: 32px;"></div>
+              <div class="picker-padding" style="height: 28px;"></div>
+              ${hourOptions.map(h => `<div class="picker-item" style="height:28px; line-height:28px;" data-val="${h}">${h}</div>`).join('')}
+              <div class="picker-padding" style="height: 28px;"></div>
             </div>
             
-            <div style="font-size: 1.5rem; font-weight: bold; color: var(--pastel-lavender); line-height: 96px; z-index: 2;">:</div>
+            <div style="font-size: 1.2rem; font-weight: bold; color: var(--pastel-lavender); line-height: 84px; z-index: 2;">:</div>
             
             <!-- Minutes Column -->
             <div class="picker-column min-column">
-              <div class="picker-padding" style="height: 32px;"></div>
-              ${minOptions.map(m => `<div class="picker-item" style="height:32px; line-height:32px;" data-val="${m}">${m}</div>`).join('')}
-              <div class="picker-padding" style="height: 32px;"></div>
+              <div class="picker-padding" style="height: 28px;"></div>
+              ${minOptions.map(m => `<div class="picker-item" style="height:28px; line-height:28px;" data-val="${m}">${m}</div>`).join('')}
+              <div class="picker-padding" style="height: 28px;"></div>
             </div>
           </div>
 
-          <button class="btn btn-primary btn-done-time" style="width: 100%; margin-top: 0.5rem; min-height: 36px; font-size: 0.85rem; padding: 0.2rem 0.5rem;">ตกลง</button>
+          <button class="btn btn-done-time" style="width: auto; display: block; margin: 0.4rem auto 0; min-height: 26px; font-size: 0.75rem; padding: 0.15rem 0.75rem; border: none; border-radius: 4px; color: #121214; background-color: var(--pastel-mint); font-weight: bold; cursor: pointer;">ตกลง</button>
         `;
+
         
         const hourCol = timeSelector.querySelector('.hour-column');
         const minCol = timeSelector.querySelector('.min-column');
@@ -1030,7 +2506,7 @@
         
         let scrollTimeoutHour;
         let scrollTimeoutMin;
-
+ 
         function commitSelectedTime() {
           if (typeof hourCol.querySelector !== 'function' || typeof minCol.querySelector !== 'function') return;
           const activeHourItem = hourCol.querySelector('.picker-item.selected');
@@ -1041,10 +2517,10 @@
             setMealTime(meal.id, `${h}:${m}`);
           }
         }
-
+ 
         hourCol.addEventListener('scroll', () => {
           clearTimeout(scrollTimeoutHour);
-          const index = Math.round(hourCol.scrollTop / 32);
+          const index = Math.round(hourCol.scrollTop / 28);
           if (typeof hourCol.querySelectorAll !== 'function') return;
           const items = hourCol.querySelectorAll('.picker-item');
           items.forEach((item, idx) => {
@@ -1053,10 +2529,10 @@
           });
           scrollTimeoutHour = setTimeout(commitSelectedTime, 100);
         });
-
+ 
         minCol.addEventListener('scroll', () => {
           clearTimeout(scrollTimeoutMin);
-          const index = Math.round(minCol.scrollTop / 32);
+          const index = Math.round(minCol.scrollTop / 28);
           if (typeof minCol.querySelectorAll !== 'function') return;
           const items = minCol.querySelectorAll('.picker-item');
           items.forEach((item, idx) => {
@@ -1065,7 +2541,7 @@
           });
           scrollTimeoutMin = setTimeout(commitSelectedTime, 100);
         });
-
+ 
         if (typeof timeSelector.querySelectorAll === 'function') {
           timeSelector.querySelectorAll('.picker-item').forEach(item => {
             item.addEventListener('click', () => {
@@ -1075,7 +2551,7 @@
                 const idx = items.indexOf(item);
                 if (idx !== -1 && typeof col.scrollTo === 'function') {
                   col.scrollTo({
-                    top: idx * 32,
+                    top: idx * 28,
                     behavior: 'smooth'
                   });
                 }
@@ -1083,7 +2559,7 @@
             });
           });
         }
-
+ 
         function syncPickerScroll(smooth = false) {
           if (!hourCol || !minCol || typeof hourCol.querySelectorAll !== 'function' || typeof minCol.querySelectorAll !== 'function') return;
           const time = meal.time || '12:00';
@@ -1098,11 +2574,11 @@
           if (hIdx !== -1) {
             if (typeof hourCol.scrollTo === 'function') {
               hourCol.scrollTo({
-                top: hIdx * 32,
+                top: hIdx * 28,
                 behavior: smooth ? 'smooth' : 'auto'
               });
             } else {
-              hourCol.scrollTop = hIdx * 32;
+              hourCol.scrollTop = hIdx * 28;
             }
             hourItems.forEach((item, idx) => {
               if (idx === hIdx) item.classList.add('selected');
@@ -1113,11 +2589,11 @@
           if (mIdx !== -1) {
             if (typeof minCol.scrollTo === 'function') {
               minCol.scrollTo({
-                top: mIdx * 32,
+                top: mIdx * 28,
                 behavior: smooth ? 'smooth' : 'auto'
               });
             } else {
-              minCol.scrollTop = mIdx * 32;
+              minCol.scrollTop = mIdx * 28;
             }
             minItems.forEach((item, idx) => {
               if (idx === mIdx) item.classList.add('selected');
@@ -1168,12 +2644,55 @@
       return `${item.name} ${qty}${space}${unitStr}`;
     }
 
+    function renderMenuTabs() {
+      const container = document.getElementById('menu-tabs-container');
+      if (!container) return;
+      container.innerHTML = '';
+      
+      FOOD_CATEGORIES.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `menu-tab-btn ${activeCategory === cat.id ? 'active' : ''}`;
+        btn.textContent = cat.name;
+        btn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          activeCategory = cat.id;
+          const filterInput = document.getElementById('food-filter-input');
+          if (filterInput) filterInput.value = '';
+          renderMenuTabs();
+          renderFoodMenu();
+        });
+        container.appendChild(btn);
+      });
+    }
+
     function renderFoodMenu() {
       const grid = document.getElementById('quick-foods-grid');
       if (!grid) return;
       grid.innerHTML = '';
       
-      DEFAULT_FOOD_ITEMS.forEach(item => {
+      const filterInput = document.getElementById('food-filter-input');
+      const filterText = filterInput ? filterInput.value.trim().toLowerCase() : '';
+      
+      const filteredItems = DEFAULT_FOOD_ITEMS.filter(item => {
+        const matchesQuery = item.name.toLowerCase().includes(filterText);
+        if (filterText) {
+          return matchesQuery;
+        } else {
+          return item.category === activeCategory;
+        }
+      });
+      
+      if (filteredItems.length === 0) {
+        const noItems = document.createElement('span');
+        noItems.style.fontSize = '0.75rem';
+        noItems.style.color = 'var(--text-sub)';
+        noItems.style.padding = '0.2rem';
+        noItems.textContent = 'ไม่พบเมนูอาหาร';
+        grid.appendChild(noItems);
+        return;
+      }
+      
+      filteredItems.forEach(item => {
         const tag = document.createElement('span');
         tag.className = 'quick-food-tag';
         tag.textContent = item.name;
@@ -1238,9 +2757,9 @@
         const btn = document.createElement('button');
         const isDefault = qty === defaultVal;
         btn.className = `btn ${isDefault ? 'btn-primary' : ''}`;
-        btn.style.minHeight = '38px';
-        btn.style.padding = '0.25rem 0.75rem';
-        btn.style.fontSize = '0.85rem';
+        btn.style.minHeight = '32px';
+        btn.style.padding = '0.2rem 0.6rem';
+        btn.style.fontSize = '0.82rem';
         btn.style.flexShrink = '0';
         
         const space = activeFoodItem.spaceBeforeUnit ? " " : "";
@@ -1381,9 +2900,9 @@
         CARDIO_ACTIVITIES.forEach(act => {
           const btn = document.createElement('button');
           btn.className = `btn ${activeCardioActivity === act ? 'btn-primary' : ''}`;
-          btn.style.minHeight = '38px';
-          btn.style.padding = '0.25rem 0.75rem';
-          btn.style.fontSize = '0.85rem';
+          btn.style.minHeight = '32px';
+          btn.style.padding = '0.2rem 0.6rem';
+          btn.style.fontSize = '0.82rem';
           btn.textContent = act;
           btn.addEventListener('click', () => selectCardioActivity(act));
           actContainer.appendChild(btn);
@@ -1395,9 +2914,10 @@
         CARDIO_DURATIONS.forEach(dur => {
           const btn = document.createElement('button');
           btn.className = 'btn';
-          btn.style.minHeight = '38px';
-          btn.style.padding = '0.25rem 0.75rem';
-          btn.style.fontSize = '0.85rem';
+          btn.style.minHeight = '32px';
+          btn.style.padding = '0.2rem 0.6rem';
+          btn.style.fontSize = '0.82rem';
+          btn.style.flexShrink = '0';
           btn.textContent = dur;
           
           if (!activeCardioActivity) {
@@ -1409,6 +2929,7 @@
           durContainer.appendChild(btn);
         });
       }
+
     }
 
     function toggleWeightMuscle(muscle) {
@@ -1431,9 +2952,9 @@
         const isActive = state.weight.includes(muscle);
         const btn = document.createElement('button');
         btn.className = `btn ${isActive ? 'btn-primary' : ''}`;
-        btn.style.minHeight = '42px';
-        btn.style.padding = '0.4rem 1rem';
-        btn.style.fontSize = '0.9rem';
+        btn.style.minHeight = '32px';
+        btn.style.padding = '0.2rem 0.6rem';
+        btn.style.fontSize = '0.82rem';
         btn.textContent = muscle;
         btn.addEventListener('click', () => toggleWeightMuscle(muscle));
         container.appendChild(btn);
@@ -1532,10 +3053,10 @@
       }
     }
 
-    // --- DOM Setup & Event Listeners ---
     document.addEventListener('DOMContentLoaded', () => {
       loadState();
       renderMeals();
+      renderMenuTabs();
       renderFoodMenu();
       renderQuantityOptions();
       renderCardio();
@@ -1602,6 +3123,21 @@
         });
       }
 
+      const btnPastePhoto = document.getElementById('btn-paste-photo');
+      if (btnPastePhoto && photoInput) {
+        btnPastePhoto.addEventListener('click', (e) => {
+          e.stopPropagation();
+          navigator.clipboard.readText().then(text => {
+            photoInput.value = text;
+            state.photoLink = text;
+            saveState();
+            updatePreview();
+          }).catch(err => {
+            console.error("Failed to read clipboard text: ", err);
+          });
+        });
+      }
+
       // Copy to LINE clipboard button
       const copyBtn = document.getElementById('btn-copy-line');
       if (copyBtn) {
@@ -1643,6 +3179,14 @@
           if (e.key === 'Enter') {
             commitCustomFood();
           }
+        });
+      }
+
+      // Food Filter bindings
+      const foodFilterInput = document.getElementById('food-filter-input');
+      if (foodFilterInput) {
+        foodFilterInput.addEventListener('input', () => {
+          renderFoodMenu();
         });
       }
 
@@ -1765,6 +3309,27 @@
       
       state.meals = origMeals;
     });
+
+    test("Hides food menu when any time picker is open", async () => {
+      const origMeals = [...state.meals];
+      state.meals = [
+        { id: 1, time: '12:00', showTimePicker: true, foods: [] }
+      ];
+      renderMeals();
+      const foodMenuSection = document.getElementById('food-menu-section');
+      if (foodMenuSection) {
+        assertEquals(foodMenuSection.style.display, 'none', "เมนูอาหารต้องไม่แสดงเมื่อเปิดเลือกเวลา");
+      }
+      
+      state.meals[0].showTimePicker = false;
+      renderMeals();
+      if (foodMenuSection) {
+        assertEquals(foodMenuSection.style.display, 'flex', "เมนูอาหารต้องแสดงเมื่อปิดการเลือกเวลา");
+      }
+      
+      state.meals = origMeals;
+    });
+
 
     test("Appends Quick Item foods to active meal text", async () => {
       const origMeals = [...state.meals];
