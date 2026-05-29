@@ -2,7 +2,7 @@
 <html lang="th" class="theme-night">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Meal Tracker - บันทึกมื้ออาหาร</title>
   <style>
     /* CSS Variables for Minimal Pastel Theme */
@@ -56,6 +56,7 @@
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+      touch-action: manipulation;
     }
 
     body {
@@ -550,7 +551,8 @@
     <!-- Date Navigator in Header -->
     <div style="display: flex; align-items: center; gap: 0.3rem; background-color: var(--bg-color); padding: 0.15rem 0.35rem; border-radius: 4px; border: 1px solid var(--border-color);">
       <button class="btn" id="btn-prev-date" style="padding: 0 0.3rem; min-height: 22px; font-size: 0.7rem; border-radius: 3px; background: none; border: none; color: var(--text-main);">◀</button>
-      <span id="date-display" style="font-size: 0.8rem; font-weight: bold; min-width: 80px; text-align: center; color: var(--text-main);">-</span>
+      <span id="date-display" style="font-size: 0.8rem; font-weight: bold; min-width: 80px; text-align: center; color: var(--text-main); cursor: pointer; user-select: none;" title="คลิกเพื่อเลือกวันที่จากปฏิทิน">-</span>
+      <input type="date" id="hidden-date-picker" style="position: absolute; opacity: 0; pointer-events: none; width: 0; height: 0; border: none; padding: 0;">
       <button class="btn" id="btn-next-date" style="padding: 0 0.3rem; min-height: 22px; font-size: 0.7rem; border-radius: 3px; background: none; border: none; color: var(--text-main);">▶</button>
     </div>
 
@@ -731,6 +733,39 @@
     // =================================================================
     const DEFAULT_FOOD_ITEMS = [
   {
+    "name": "ข้าว",
+    "category": "carbs",
+    "minQty": 80,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "โอนิกิริ",
+    "category": "carbs",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ข้าวโอ๊ต",
+    "category": "carbs",
+    "minQty": 10,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 10,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
     "name": "ขนมปัง",
     "category": "carbs",
     "minQty": 1,
@@ -738,7 +773,51 @@
     "step": 1,
     "defaultQty": 2,
     "unit": "",
-    "displayUnit": "แผ่น",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "มันหวาน",
+    "category": "carbs",
+    "minQty": 65,
+    "maxQty": 130,
+    "step": 10,
+    "defaultQty": 65,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ฟักทอง",
+    "category": "carbs",
+    "minQty": 95,
+    "maxQty": 135,
+    "step": 10,
+    "defaultQty": 115,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แผ่นแป้ง",
+    "category": "carbs",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ข้าวเหนียว",
+    "category": "carbs",
+    "minQty": 75,
+    "maxQty": 225,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
     "spaceBeforeUnit": false
   },
   {
@@ -771,18 +850,7 @@
     "step": 1,
     "defaultQty": 4,
     "unit": "",
-    "displayUnit": "ลูก",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ข้าว",
-    "category": "carbs",
-    "minQty": 80,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 150,
-    "unit": "g",
-    "displayUnit": "g",
+    "displayUnit": "",
     "spaceBeforeUnit": false
   },
   {
@@ -792,61 +860,6 @@
     "maxQty": 195,
     "step": 10,
     "defaultQty": 130,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ข้าวเหนียว",
-    "category": "carbs",
-    "minQty": 75,
-    "maxQty": 225,
-    "step": 10,
-    "defaultQty": 150,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ข้าวโอ๊ต",
-    "category": "carbs",
-    "minQty": 10,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 10,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "แผ่นแป้ง",
-    "category": "carbs",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "แผ่น",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ฟักทอง",
-    "category": "carbs",
-    "minQty": 95,
-    "maxQty": 135,
-    "step": 10,
-    "defaultQty": 115,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "มันหวาน",
-    "category": "carbs",
-    "minQty": 65,
-    "maxQty": 130,
-    "step": 10,
-    "defaultQty": 65,
     "unit": "g",
     "displayUnit": "g",
     "spaceBeforeUnit": false
@@ -863,87 +876,10 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "โอนิกิริ",
-    "category": "carbs",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "ชิ้น",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "บะหมี่เกี๊ยวหมูแดง",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "ชาม",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ขนมจีนน้ำยา",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "จาน",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "กะเพราตับ",
+    "name": "ไก่",
     "category": "meals",
     "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 150,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "กะเพราเต้าหู้",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 280,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "กะเพราไก่",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "กะเพราไก่ไข่เยี่ยวม้า",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "กะหรี่ไก่",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
+    "maxQty": 200,
     "step": 10,
     "defaultQty": 120,
     "unit": "g",
@@ -962,7 +898,18 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "กุ้งผัดพริกแกง",
+    "name": "ปลากระป๋อง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลานิล",
     "category": "meals",
     "minQty": 50,
     "maxQty": 150,
@@ -973,21 +920,10 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "เกาเหลาไก่ตุ๋นมะระ",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "ถ้วย",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "เกาเหลาหมูต้มยำ",
+    "name": "ทูน่า",
     "category": "meals",
     "minQty": 50,
-    "maxQty": 300,
+    "maxQty": 150,
     "step": 10,
     "defaultQty": 100,
     "unit": "g",
@@ -995,32 +931,10 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "แกงปลานิลใบยอ",
+    "name": "สันใน",
     "category": "meals",
-    "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 80,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "แกงส้มกุ้ง",
-    "category": "meals",
-    "minQty": 25,
-    "maxQty": 200,
-    "step": 10,
-    "defaultQty": 50,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไก่",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 200,
+    "minQty": 60,
+    "maxQty": 180,
     "step": 10,
     "defaultQty": 120,
     "unit": "g",
@@ -1028,14 +942,36 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ไก่กระเทียม",
+    "name": "ไข่",
     "category": "meals",
-    "minQty": 50,
-    "maxQty": 150,
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ฟอง",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แคปหมู",
+    "category": "meals",
+    "minQty": 5,
+    "maxQty": 200,
     "step": 10,
-    "defaultQty": 100,
+    "defaultQty": 14,
     "unit": "g",
     "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เต้าหู้เหลืองนิ่ม",
+    "category": "meals",
+    "minQty": 140,
+    "maxQty": 420,
+    "step": 50,
+    "defaultQty": 280,
+    "unit": "ml",
+    "displayUnit": "ml",
     "spaceBeforeUnit": false
   },
   {
@@ -1050,12 +986,67 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ไก่ทอดหม้อทอดไร้น้ำมัน",
+    "name": "ต้มมะระไก่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "บะหมี่เกี๊ยวหมูแดง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มจืดไก่",
     "category": "meals",
     "minQty": 50,
-    "maxQty": 300,
+    "maxQty": 200,
     "step": 10,
-    "defaultQty": 100,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดหอมใหญ่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ธัญพืชรวม",
+    "category": "meals",
+    "minQty": 65,
+    "maxQty": 195,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในผัดพริกแกง",
+    "category": "meals",
+    "minQty": 110,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 130,
     "unit": "g",
     "displayUnit": "g",
     "spaceBeforeUnit": false
@@ -1072,29 +1063,29 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ไก่ผัดซอสญี่ปุ่น",
+    "name": "ไข่ตุ๋นไก่",
     "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
+    "minQty": 50,
+    "maxQty": 200,
     "step": 10,
     "defaultQty": 120,
     "unit": "g",
     "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ผัดปลากระป๋อง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
     "spaceBeforeUnit": false
   },
   {
     "name": "ไก่ผัดผงกะหรี่",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไก่ผัดหน่อไม้ฝรั่ง",
     "category": "meals",
     "minQty": 60,
     "maxQty": 180,
@@ -1116,7 +1107,73 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ไก่ผัดหอมใหญ่",
+    "name": "ไข่เจียวไก่",
+    "category": "meals",
+    "minQty": 30,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 60,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลานิลนึ่ง",
+    "category": "meals",
+    "minQty": 75,
+    "maxQty": 225,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ลาบหมูตับ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในย่าง",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แกงส้ม",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่กระเทียม",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดหน่อไม้ฝรั่ง",
     "category": "meals",
     "minQty": 60,
     "maxQty": 180,
@@ -1138,65 +1195,10 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ไก่ย่างห้าดาว",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
     "name": "ไก่ย่างห้าดาวลอกหนัง",
     "category": "meals",
     "minQty": 60,
     "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไข่เจียวไก่",
-    "category": "meals",
-    "minQty": 30,
-    "maxQty": 200,
-    "step": 10,
-    "defaultQty": 60,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไข่ตุ๋น",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 2,
-    "unit": "",
-    "displayUnit": "ถ้วย",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไข่ตุ๋นกุ้ง",
-    "category": "meals",
-    "minQty": 25,
-    "maxQty": 200,
-    "step": 10,
-    "defaultQty": 50,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไข่ตุ๋นไก่",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 200,
     "step": 10,
     "defaultQty": 120,
     "unit": "g",
@@ -1215,39 +1217,6 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "คะน้าปลากระป๋อง",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "จาน",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "คากิ",
-    "category": "meals",
-    "minQty": 10,
-    "maxQty": 200,
-    "step": 10,
-    "defaultQty": 30,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ชายสี่หมี่เกี๊ยวแห้งหมูแดง",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "ชาม",
-    "spaceBeforeUnit": false
-  },
-  {
     "name": "ซูชิ",
     "category": "meals",
     "minQty": 5,
@@ -1259,56 +1228,12 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "แซนวิชพอร์คชอปโทส",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "อัน",
-    "spaceBeforeUnit": false
-  },
-  {
     "name": "ต้มกระดูกอ่อนหมู",
     "category": "meals",
     "minQty": 65,
     "maxQty": 195,
     "step": 10,
     "defaultQty": 130,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ต้มจืดไก่",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 200,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ต้มจืดไก่ใส่ตับ",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ต้มมะระไก่",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
     "unit": "g",
     "displayUnit": "g",
     "spaceBeforeUnit": false
@@ -1343,7 +1268,7 @@
     "step": 1,
     "defaultQty": 1,
     "unit": "",
-    "displayUnit": "ถ้วย",
+    "displayUnit": "",
     "spaceBeforeUnit": false
   },
   {
@@ -1353,116 +1278,6 @@
     "maxQty": 420,
     "step": 10,
     "defaultQty": 280,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "เต้าหู้เหลืองนิ่ม",
-    "category": "meals",
-    "minQty": 140,
-    "maxQty": 420,
-    "step": 50,
-    "defaultQty": 280,
-    "unit": "ml",
-    "displayUnit": "ml",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ทูน่า",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 100,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ทูน่าผัดซีอิ๊ว",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 100,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ธัญพืชรวม",
-    "category": "meals",
-    "minQty": 65,
-    "maxQty": 195,
-    "step": 10,
-    "defaultQty": 130,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "น้ำตก",
-    "category": "meals",
-    "minQty": 25,
-    "maxQty": 200,
-    "step": 10,
-    "defaultQty": 50,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "เบนโต๊ะ",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "กล่อง",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ปลากระป๋อง",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "กระป๋อง",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ปลานิล",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 100,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ปลานิลนึ่ง",
-    "category": "meals",
-    "minQty": 75,
-    "maxQty": 225,
-    "step": 10,
-    "defaultQty": 150,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ปลาผัดพริกสด",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 100,
     "unit": "g",
     "displayUnit": "g",
     "spaceBeforeUnit": false
@@ -1512,14 +1327,300 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ผัดปลากระป๋อง",
+    "name": "ลูกชิ้นเนื้อ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในกระเทียม",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สันในพริกไทย",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สามชั้นจากพืช",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราไก่",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราไก่ไข่เยี่ยวม้า",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราตับ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 150,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะเพราเต้าหู้",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 280,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กะหรี่ไก่",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "กุ้งผัดพริกแกง",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เกาเหลาไก่ตุ๋นมะระ",
     "category": "meals",
     "minQty": 1,
     "maxQty": 5,
     "step": 1,
     "defaultQty": 1,
     "unit": "",
-    "displayUnit": "จาน",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เกาเหลาหมูต้มยำ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แกงปลานิลใบยอ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 80,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แกงส้มกุ้ง",
+    "category": "meals",
+    "minQty": 25,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ทอดหม้อไรน้ำมัน",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ผัดซอสญี่ปุ่น",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไก่ย่างห้าดาว",
+    "category": "meals",
+    "minQty": 60,
+    "maxQty": 180,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ไข่ตุ๋นกุ้ง",
+    "category": "meals",
+    "minQty": 25,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "คะน้าปลากระป๋อง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "คากิ",
+    "category": "meals",
+    "minQty": 10,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 30,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ชายสี่หมี่เกี๊ยวแห้งหมูแดง",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แซนวิชพอร์คชอปโทส",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "อัน",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ต้มจืดไก่ใส่ตับ",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 120,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ทูน่าผัดซีอิ๊ว",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "น้ำตก",
+    "category": "meals",
+    "minQty": 25,
+    "maxQty": 200,
+    "step": 10,
+    "defaultQty": 50,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เบนโต๊ะ",
+    "category": "meals",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ปลาผัดพริกสด",
+    "category": "meals",
+    "minQty": 50,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
     "spaceBeforeUnit": false
   },
   {
@@ -1530,7 +1631,7 @@
     "step": 1,
     "defaultQty": 0.5,
     "unit": "",
-    "displayUnit": "จาน",
+    "displayUnit": "",
     "spaceBeforeUnit": false
   },
   {
@@ -1600,84 +1701,7 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ลาบหมูตับ",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 100,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ลูกชิ้นเนื้อ",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 100,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "สันใน",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "สันในกระเทียม",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
     "name": "สันในผัดถั่ว",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "สันในผัดพริกแกง",
-    "category": "meals",
-    "minQty": 110,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 130,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "สันในพริกไทย",
-    "category": "meals",
-    "minQty": 60,
-    "maxQty": 180,
-    "step": 10,
-    "defaultQty": 120,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "สันในย่าง",
     "category": "meals",
     "minQty": 60,
     "maxQty": 180,
@@ -1721,17 +1745,6 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "สามชั้นจากพืช",
-    "category": "meals",
-    "minQty": 50,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 100,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
     "name": "หมกใบยอทำเอง",
     "category": "meals",
     "minQty": 1,
@@ -1739,7 +1752,7 @@
     "step": 1,
     "defaultQty": 1,
     "unit": "",
-    "displayUnit": "ห่อ",
+    "displayUnit": "",
     "spaceBeforeUnit": false
   },
   {
@@ -1809,47 +1822,14 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ไข่",
+    "name": "ขนมจีนน้ำยา",
     "category": "meals",
     "minQty": 1,
     "maxQty": 5,
     "step": 1,
     "defaultQty": 1,
     "unit": "",
-    "displayUnit": "ฟอง",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไข่ดาว",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "ฟอง",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "ไข่พะโล้",
-    "category": "meals",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "ฟอง",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "แคปหมู",
-    "category": "meals",
-    "minQty": 5,
-    "maxQty": 200,
-    "step": 10,
-    "defaultQty": 14,
-    "unit": "g",
-    "displayUnit": "g",
+    "displayUnit": "จาน",
     "spaceBeforeUnit": false
   },
   {
@@ -1889,7 +1869,7 @@
     "name": "ทาโร่",
     "category": "desserts",
     "minQty": 10,
-    "maxQty": 40,
+    "maxQty": 50,
     "step": 10,
     "defaultQty": 20,
     "unit": "g",
@@ -1908,17 +1888,6 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "ชาส้ม",
-    "category": "drinks",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "แก้ว",
-    "spaceBeforeUnit": false
-  },
-  {
     "name": "นม",
     "category": "drinks",
     "minQty": 100,
@@ -1930,12 +1899,12 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "นมเปรี้ยว",
+    "name": "เวย์โปรตีน",
     "category": "drinks",
-    "minQty": 150,
-    "maxQty": 450,
+    "minQty": 100,
+    "maxQty": 500,
     "step": 50,
-    "defaultQty": 300,
+    "defaultQty": 350,
     "unit": "ml",
     "displayUnit": "ml",
     "spaceBeforeUnit": false
@@ -1952,14 +1921,36 @@
     "spaceBeforeUnit": true
   },
   {
-    "name": "เวย์โปรตีน",
+    "name": "นมเปรี้ยว",
     "category": "drinks",
-    "minQty": 100,
-    "maxQty": 500,
+    "minQty": 150,
+    "maxQty": 450,
     "step": 50,
-    "defaultQty": 350,
+    "defaultQty": 300,
     "unit": "ml",
     "displayUnit": "ml",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "ชาส้ม",
+    "category": "drinks",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "สับปะรด",
+    "category": "fruits",
+    "minQty": 50,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 100,
+    "unit": "g",
+    "displayUnit": "g",
     "spaceBeforeUnit": false
   },
   {
@@ -1971,54 +1962,10 @@
     "defaultQty": 120,
     "unit": "g",
     "displayUnit": "g",
-    "spaceBeforeUnit": true
-  },
-  {
-    "name": "แก้วมังกร",
-    "category": "fruits",
-    "minQty": 100,
-    "maxQty": 300,
-    "step": 10,
-    "defaultQty": 200,
-    "unit": "g",
-    "displayUnit": "g",
     "spaceBeforeUnit": false
   },
   {
-    "name": "แคนตาลูป",
-    "category": "fruits",
-    "minQty": 110,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 130,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "พุทราชีส",
-    "category": "fruits",
-    "minQty": 1,
-    "maxQty": 5,
-    "step": 1,
-    "defaultQty": 1,
-    "unit": "",
-    "displayUnit": "ลูก",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "เมล่อน",
-    "category": "fruits",
-    "minQty": 50,
-    "maxQty": 150,
-    "step": 10,
-    "defaultQty": 100,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "สับปะรด",
+    "name": "แอปเปิ้ล",
     "category": "fruits",
     "minQty": 50,
     "maxQty": 150,
@@ -2040,7 +1987,29 @@
     "spaceBeforeUnit": false
   },
   {
-    "name": "แอปเปิ้ล",
+    "name": "แคนตาลูป",
+    "category": "fruits",
+    "minQty": 110,
+    "maxQty": 150,
+    "step": 10,
+    "defaultQty": 130,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "แก้วมังกร",
+    "category": "fruits",
+    "minQty": 100,
+    "maxQty": 300,
+    "step": 10,
+    "defaultQty": 200,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เมล่อน",
     "category": "fruits",
     "minQty": 50,
     "maxQty": 150,
@@ -2048,6 +2017,17 @@
     "defaultQty": 100,
     "unit": "g",
     "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "พุทราชีส",
+    "category": "fruits",
+    "minQty": 1,
+    "maxQty": 5,
+    "step": 1,
+    "defaultQty": 1,
+    "unit": "",
+    "displayUnit": "ลูก",
     "spaceBeforeUnit": false
   },
   {
@@ -2060,28 +2040,6 @@
     "unit": "ชต",
     "displayUnit": "ชต",
     "spaceBeforeUnit": true
-  },
-  {
-    "name": "เนยถั่ว",
-    "category": "extras",
-    "minQty": 5,
-    "maxQty": 50,
-    "step": 5,
-    "defaultQty": 20,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
-  },
-  {
-    "name": "เมล็ดเจีย",
-    "category": "extras",
-    "minQty": 10,
-    "maxQty": 30,
-    "step": 10,
-    "defaultQty": 10,
-    "unit": "g",
-    "displayUnit": "g",
-    "spaceBeforeUnit": false
   },
   {
     "name": "โยเกิร์ต",
@@ -2101,6 +2059,28 @@
     "maxQty": 50,
     "step": 5,
     "defaultQty": 20,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เนยถั่ว",
+    "category": "extras",
+    "minQty": 5,
+    "maxQty": 50,
+    "step": 5,
+    "defaultQty": 20,
+    "unit": "g",
+    "displayUnit": "g",
+    "spaceBeforeUnit": false
+  },
+  {
+    "name": "เมล็ดเจีย",
+    "category": "extras",
+    "minQty": 10,
+    "maxQty": 50,
+    "step": 10,
+    "defaultQty": 10,
     "unit": "g",
     "displayUnit": "g",
     "spaceBeforeUnit": false
@@ -3072,8 +3052,31 @@
       // Date selectors
       const prevDateBtn = document.getElementById('btn-prev-date');
       const nextDateBtn = document.getElementById('btn-next-date');
+      const dateDisplay = document.getElementById('date-display');
+      const hiddenDatePicker = document.getElementById('hidden-date-picker');
+
       if (prevDateBtn) prevDateBtn.addEventListener('click', () => changeDate(-1));
       if (nextDateBtn) nextDateBtn.addEventListener('click', () => changeDate(1));
+
+      if (dateDisplay && hiddenDatePicker) {
+        dateDisplay.addEventListener('click', (e) => {
+          e.stopPropagation();
+          hiddenDatePicker.value = getISODateString(currentDate);
+          if (typeof hiddenDatePicker.showPicker === 'function') {
+            hiddenDatePicker.showPicker();
+          } else {
+            hiddenDatePicker.click();
+          }
+        });
+
+        hiddenDatePicker.addEventListener('change', (e) => {
+          const parts = e.target.value.split('-');
+          if (parts.length === 3) {
+            currentDate = new Date(parts[0], parts[1] - 1, parts[2]);
+            updateDateDisplay();
+          }
+        });
+      }
 
       // Water selectors
       const waterMinusBtn = document.getElementById('btn-water-minus');
